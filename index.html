@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AAuth на пальцах</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Интерактивная инфографика по протоколу AAuth: паспорт и подпись для ИИ-агентов, пять режимов доступа, миссии и сравнение с OAuth.">
+<meta property="og:title" content="AAuth на пальцах">
+<meta property="og:description" content="Как ИИ-агенту представиться, получить разрешение и не утащить чужие ключи. Интерактивная инфографика по черновику IETF.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nibrmi.github.io/aauth/">
+<meta property="og:image" content="https://nibrmi.github.io/aauth/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232F6FEB'/%3E%3Ctext x='16' y='22.5' font-family='Arial Black,Arial' font-weight='900' font-size='15' fill='white' text-anchor='middle'%3EAA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -36,6 +46,7 @@
   --good:#3CC48D; --bad:#FF6B6B; color-scheme:dark;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
@@ -48,7 +59,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
 .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .lead{font-size:clamp(17px,2vw,19px);color:var(--muted);max-width:62ch}
-section.ch{padding-block:56px 8px}
+section.ch{padding-block:56px 8px;scroll-margin-top:52px}
 .ch-head{display:grid;gap:10px;margin-bottom:26px}
 .ch-head .num{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.1em}
 
@@ -58,6 +69,7 @@ nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-
 nav.top .wrap::-webkit-scrollbar{display:none}
 nav.top a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid transparent}
 nav.top a:hover{color:var(--ink);border-color:var(--line)}
+nav.top a.on{color:var(--ink);background:var(--surface);border-color:var(--line)}
 nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 
 /* hero */
@@ -70,6 +82,8 @@ nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
 .chip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:14px;font-weight:500}
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--good);display:block}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.cta a{text-decoration:none}
 .passport{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 50px -30px rgba(20,33,61,.45);position:relative;overflow:hidden}
 .passport .ph{display:flex;justify-content:space-between;align-items:center}
 .passport .ph b{font-family:var(--f-display);font-size:14px;letter-spacing:.06em}
@@ -103,7 +117,7 @@ nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 
 /* steal demo */
 .steal{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start}
-#steal-svg{width:100%;height:auto;display:block;min-width:440px}
+#steal-svg{width:100%;height:auto;display:block;max-width:560px;margin:0 auto}
 .verdict{border-radius:var(--r);padding:16px;display:grid;gap:8px;border:1px solid var(--line);background:var(--surface-2)}
 .verdict.bad{border-color:var(--bad);background:var(--s-thief)}
 .verdict.good{border-color:var(--good);background:var(--s-res)}
@@ -111,11 +125,11 @@ nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 .verdict ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;display:grid;gap:4px}
 
 /* roles */
-.roles{display:grid;grid-template-columns:1.25fr 1fr;gap:20px;align-items:start}
-#roles-svg{width:100%;height:auto;display:block;min-width:520px}
+.roles{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start}
+#roles-svg{width:100%;height:auto;display:block}
 .node{cursor:pointer}
 .node circle{transition:stroke-width .2s}
-.node.dim,.edge.dim{opacity:.22}
+.node.dim,.edge.dim{opacity:.32}
 .edge,.node{transition:opacity .25s}
 .role-card{display:grid;gap:12px}
 .role-card .who{display:flex;gap:12px;align-items:center}
@@ -130,14 +144,16 @@ nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 .note{border-left:3px solid var(--accent);padding:4px 0 4px 14px;color:var(--muted);font-size:15px}
 
 /* tokens */
-.tokens{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.tok{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:10px;align-content:start;position:relative;overflow:hidden}
+.tokens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tok{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 18px 18px;display:grid;gap:10px;align-content:start;position:relative;overflow:hidden;min-width:0}
 .tok::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--tc)}
-.tok .tt{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .tok h3{font-size:18px}
-.tok .life{font-family:var(--f-mono);font-size:12px;white-space:nowrap;padding:3px 8px;border-radius:999px;background:var(--surface-2);color:var(--muted)}
-.tok .tech{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
-.tok .says{font-size:15px;background:var(--surface-2);border-radius:10px;padding:10px 12px;font-style:italic}
+.tok .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.tok .life{font-family:var(--f-mono);font-size:12px;font-weight:600;white-space:nowrap;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.tok .tech{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.tok .says{font-size:15px;background:var(--surface-2);border-radius:10px;padding:10px 12px;font-style:italic;overflow-wrap:anywhere}
+.tok.wide{grid-column:1/-1;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px 24px;align-items:start}
+.tok.wide .side{display:grid;gap:10px;align-content:start;min-width:0}
 .tok .from{font-size:14px;color:var(--muted)}
 .tok .from b{color:var(--tc);font-weight:600}
 .tok details summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--accent);list-style:none}
@@ -161,12 +177,14 @@ nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 .knows{display:flex;gap:8px;align-items:center;font-size:14px;background:var(--surface-2);border-radius:999px;padding:6px 12px;border:1px solid var(--line)}
 .knows b{font-weight:700}
 .seqbox{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px}
-.seq{width:100%;height:auto;display:block;min-width:680px}
+.seq{width:100%;height:auto;display:block}
 .seq text{font-family:var(--f-body)}
 .seq .lbl{font-size:13px;font-weight:600}
 .seq .hdr{font-size:13px;font-weight:700}
 .seq .hsub{font-size:10.5px}
-.caption{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
+.dock{position:sticky;bottom:0;z-index:5;display:grid;gap:10px;padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(to bottom,transparent,var(--bg) 14px)}
+.caption{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 10px 30px -18px rgba(20,33,61,.5)}
+.swipe{display:none;font-size:13px;color:var(--muted)}
 .caption .stepno{font-family:var(--f-display);font-size:28px;font-weight:700;color:var(--accent);line-height:1;min-width:2.2ch;font-variant-numeric:tabular-nums}
 .caption .stepno small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:400;margin-top:6px}
 .caption p.big{font-size:17px}
@@ -176,15 +194,18 @@ nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
 .progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
 
 /* ladder */
-.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:18px}
+.ladder-head{margin-top:28px;display:grid;gap:4px}
+.ladder-head p{color:var(--muted);font-size:15px}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.ladder div{cursor:pointer}
 .ladder div{border-radius:12px;padding:12px;background:var(--surface);border:1px solid var(--line);display:grid;gap:4px;align-content:end;font-size:13.5px}
 .ladder div b{font-size:14px}
 .ladder div span{color:var(--muted)}
 .ladder .bar{height:var(--h);background:linear-gradient(var(--accent),color-mix(in srgb,var(--accent) 40%,transparent));border-radius:8px;opacity:.85}
 
 /* loop */
-.loop{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start}
-.loop svg{width:100%;max-width:320px;height:auto;display:block;margin:0 auto}
+.loop{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.loop svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
 .reqs{display:grid;gap:10px}
 .req{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:14px;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start}
 .req code{grid-row:span 2;padding:4px 8px;border-radius:8px;background:var(--surface-2);font-weight:600;white-space:nowrap}
@@ -235,6 +256,13 @@ table.cmp td:nth-child(3){color:var(--ink)}
 table.cmp .x{color:var(--bad);font-weight:700;margin-right:6px}
 table.cmp .v{color:var(--good);font-weight:700;margin-right:6px}
 
+.faq{display:grid;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 18px}
+.faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:600;font-size:16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-display);font-size:20px;color:var(--accent);flex:none;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);padding-bottom:16px;max-width:75ch}
 .status{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
 .status div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:4px}
 .status b{font-family:var(--f-display);font-weight:500;font-size:18px}
@@ -245,13 +273,28 @@ footer ul{padding-left:18px;display:grid;gap:4px}
 @media (max-width:860px){
   .hero-grid,.steal,.roles,.loop,.mission{grid-template-columns:1fr}
   .tldr{grid-template-columns:1fr}
-  .modes-tabs{grid-template-columns:repeat(5,minmax(150px,1fr));overflow-x:auto;padding-bottom:4px}
-  .ladder{grid-template-columns:repeat(5,minmax(120px,1fr));overflow-x:auto}
+  .modes-tabs{grid-template-columns:repeat(5,minmax(148px,1fr));overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+  .mtab{scroll-snap-align:start}
+  .swipe{display:block}
+  .ladder{grid-template-columns:repeat(5,minmax(118px,1fr));overflow-x:auto;padding-bottom:6px}
+  .tokens{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media (max-width:520px){
-  .caption{grid-template-columns:1fr}
+@media (max-width:560px){
+  .tokens{grid-template-columns:1fr}
+  .tok.wide{grid-template-columns:1fr}
+  .caption{grid-template-columns:1fr;gap:6px;padding:12px 14px}
+  .caption .stepno{font-size:20px;display:flex;gap:8px;align-items:baseline}
+  .caption .stepno small{margin-top:0}
+  .caption p.big{font-size:15px}
+  .caption .det{font-size:11.5px;margin-top:4px}
+  .controls .btn{padding:8px 12px}
+  .progress{display:none}
+  .hide-s{display:none}
+  .seg{display:grid;grid-template-columns:1fr 1fr;border-radius:14px;width:100%}
+  .seg button{border-radius:10px}
+  #st-run{width:100%;justify-content:center}
 }
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -278,6 +321,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
     <a href="#mission">Миссии</a>
     <a href="#more">Ещё фишки</a>
     <a href="#compare">vs OAuth</a>
+    <a href="#faq">Вопросы</a>
     <a href="#status">Статус</a>
   </div>
 </nav>
@@ -288,12 +332,16 @@ footer ul{padding-left:18px;display:grid;gap:4px}
       <div>
         <div class="eyebrow">Черновик IETF · draft-hardt-oauth-aauth-protocol-11</div>
         <h1>A<span>A</span>uth</h1>
-        <p class="tag">Паспорт, подпись и доверенное лицо для ИИ-агентов</p>
-        <p class="lead">Новый протокол от Дика Хардта, редактора OAuth 2.0. Он отвечает на три вопроса: кто этот агент, за кого он работает и что ему разрешено. Без API-ключей, без регистрации на каждом сайте и без токенов, которые можно украсть.</p>
+        <p class="tag">Паспорт, подпись и доверенное лицо для <span style="white-space:nowrap">ИИ-агентов</span></p>
+        <p class="lead">Новый протокол от Дика Хардта, редактора OAuth 2.0. Он отвечает на три вопроса: кто этот агент, за кого он работает и что ему разрешено. Без API-ключей, без регистрации на каждом сайте и без токенов, которые сработают в чужих руках.</p>
         <div class="chips">
           <span class="chip"><i></i>Без предварительной регистрации</span>
           <span class="chip"><i></i>Без общих секретов</span>
           <span class="chip"><i></i>Каждый запрос подписан</span>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="#modes">Посмотреть, как работает</a>
+          <a class="btn" href="#problem">Попробовать украсть токен</a>
         </div>
       </div>
       <div class="passport" aria-label="Пример паспорта агента">
@@ -331,13 +379,13 @@ footer ul{padding-left:18px;display:grid;gap:4px}
     <div class="panel">
       <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:12px">
         <div class="seg" role="group" aria-label="Режим">
-          <button id="st-old" aria-pressed="true">Как сейчас: API-ключ / OAuth</button>
+          <button id="st-old" aria-pressed="true">Сейчас: API-ключ, OAuth</button>
           <button id="st-new" aria-pressed="false">AAuth</button>
         </div>
         <button class="btn primary" id="st-run">Воришка перехватывает токен</button>
       </div>
       <div class="steal">
-        <div class="scrollx"><svg id="steal-svg" viewBox="0 0 560 300" role="img" aria-label="Схема перехвата токена"></svg></div>
+        <div><svg id="steal-svg" viewBox="0 0 560 300" role="img" aria-label="Схема перехвата токена"></svg></div>
         <div class="verdict" id="st-verdict"></div>
       </div>
     </div>
@@ -353,7 +401,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
       <p class="lead">Нажми на любого участника, чтобы увидеть, чем он занят и с кем общается. В каждом конкретном случае участвуют не все.</p>
     </div>
     <div class="roles">
-      <div class="panel scrollx"><svg id="roles-svg" viewBox="0 0 760 420" role="img" aria-label="Схема участников"></svg></div>
+      <div class="panel"><svg id="roles-svg" viewBox="0 0 760 450" role="img" aria-label="Схема участников"></svg></div>
       <div class="panel role-card" id="role-card"></div>
     </div>
   </div>
@@ -383,25 +431,29 @@ footer ul{padding-left:18px;display:grid;gap:4px}
       <h2>Посмотри, как это работает, шаг за шагом</h2>
       <p class="lead">Выбери режим и жми «Дальше» (или стрелки на клавиатуре). Режимы отличаются тем, что сервис в итоге знает. Один сервис может использовать разные режимы для разных адресов.</p>
     </div>
+    <p class="swipe">Режимы листаются вбок →</p>
     <div class="modes-tabs" id="mode-tabs" role="tablist"></div>
     <div class="player">
       <div class="player-top">
         <p class="when" id="mode-when"></p>
         <div class="knows" id="mode-knows"></div>
       </div>
-      <div class="seqbox scrollx"><svg class="seq" id="seq" role="img" aria-label="Диаграмма обмена сообщениями"></svg></div>
-      <div class="caption" aria-live="polite">
-        <div class="stepno" id="cap-no">1<small>из 4</small></div>
-        <div><p class="big" id="cap-text"></p><p class="det" id="cap-det"></p></div>
-      </div>
-      <div class="controls">
-        <button class="btn" id="pl-reset" title="Сначала">↺ Сначала</button>
-        <button class="btn" id="pl-prev">← Назад</button>
-        <button class="btn primary" id="pl-next">Дальше →</button>
-        <button class="btn" id="pl-auto">▶ Автоплей</button>
-        <div class="progress"><i id="pl-bar"></i></div>
+      <div class="seqbox" id="seqbox"><svg class="seq" id="seq" role="img" aria-label="Диаграмма обмена сообщениями"></svg></div>
+      <div class="dock">
+        <div class="caption" aria-live="polite">
+          <div class="stepno" id="cap-no">1<small>из 4</small></div>
+          <div><p class="big" id="cap-text"></p><p class="det" id="cap-det"></p></div>
+        </div>
+        <div class="controls">
+          <button class="btn" id="pl-reset" title="Сначала" aria-label="Сначала">↺</button>
+          <button class="btn" id="pl-prev" aria-label="Назад">← <span class="hide-s">Назад</span></button>
+          <button class="btn primary" id="pl-next">Дальше →</button>
+          <button class="btn" id="pl-auto">▶ <span class="hide-s">Автоплей</span></button>
+          <div class="progress"><i id="pl-bar"></i></div>
+        </div>
       </div>
     </div>
+    <div class="ladder-head"><h3>Сколько сервис узнаёт в каждом режиме</h3><p>Чем выше столбик, тем больше сервис знает перед тем, как ответить. Нажми на столбик, чтобы открыть режим.</p></div>
     <div class="ladder" id="ladder"></div>
   </div>
 </section>
@@ -415,7 +467,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
       <p class="lead">Агент всегда делает одно и то же: отправляет запрос, читает заголовок <code>AAuth-Requirement</code> («что мне от тебя нужно»), выполняет требование и повторяет. Первый запрос к сервису и есть регистрация.</p>
     </div>
     <div class="loop">
-      <div class="panel"><svg id="loop-svg" viewBox="0 0 320 320" role="img" aria-label="Цикл запроса"></svg></div>
+      <div class="panel"><svg id="loop-svg" viewBox="0 0 340 340" role="img" aria-label="Цикл запроса"></svg></div>
       <div class="reqs" id="reqs"></div>
     </div>
   </div>
@@ -455,7 +507,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
       <div class="card"><h3>Приватность</h3><p>Для каждого сайта у тебя свой псевдоним (<code>sub</code>). Сайты не могут сопоставить тебя между собой. В режимах 3–5 сервис даже не видит, какой именно агент пришёл, поэтому не может пускать «только агентов от компании X».</p></div>
       <div class="card"><h3>Честное окно согласия</h3><p>Person Server обязан визуально отделять слова агента («мне нужно, потому что…») от того, что заявил сам сервис. Агенту выгодно, чтобы ему поверили, и ты должен видеть, где чьи слова.</p></div>
       <div class="card"><h3>Внедрять можно по частям</h3><p>Каждая сторона подключается сама по себе. Сервис может начать с проверки подписи вместо API-ключа. Тот, кто AAuth не знает, просто игнорирует новые заголовки, и всё старое продолжает работать.</p></div>
-      <div class="card"><h3>Деньги и события</h3><p>Отдельные черновики того же семейства: бюджеты (лимиты трат), события для агентов, R3 (права в терминах MCP, OpenAPI, gRPC), Bootstrap (как агенту получить паспорт).</p></div>
+      <div class="card"><h3>Целое семейство черновиков</h3><p>Рядом с основным протоколом развиваются отдельные документы: Budgets (лимиты трат агента), Events (уведомления агентам), R3 (права в терминах MCP, OpenAPI, gRPC, GraphQL) и Bootstrap (как агент получает паспорт).</p></div>
     </div>
   </div>
 </section>
@@ -475,7 +527,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
           <tr><td>Кто такой клиент</td><td><span class="x">✕</span>client_id выдаёт каждый сервер свой: id в Google ничего не значит в GitHub</td><td><span class="v">✓</span>Один ID <code>aauth:имя@домен</code>, его может проверить кто угодно</td></tr>
           <tr><td>Регистрация</td><td><span class="x">✕</span>Заранее на каждом сервере (или Dynamic Client Registration, как в MCP)</td><td><span class="v">✓</span>Не нужна: первый запрос и есть регистрация</td></tr>
           <tr><td>Кража токена</td><td><span class="x">✕</span>Токен на предъявителя: кто украл, тот и вошёл</td><td><span class="v">✓</span>Токен привязан к ключу, каждый запрос подписан</td></tr>
-          <tr><td>Точность</td><td><span class="x">✕</span>Один client_id на всё приложение</td><td><span class="v">✓</span>ID у каждой запущенной копии: отозвать можно одну</td></tr>
+          <tr><td>Копии агента</td><td><span class="x">✕</span>Один client_id на всё приложение</td><td><span class="v">✓</span>ID у каждой запущенной копии: отозвать можно одну</td></tr>
           <tr><td>Подлинность сервиса</td><td><span class="x">✕</span>Сервис криптографически не подтверждает, кто он</td><td><span class="v">✓</span>Сервис подписывает заявку (resource token)</td></tr>
           <tr><td>Контроль за агентом</td><td><span class="x">✕</span>Нет</td><td><span class="v">✓</span>Миссии, разрешения на действия, аудит, вопросы человеку</td></tr>
           <tr><td>Чей сервер решает</td><td><span class="x">✕</span>Всегда сервер владельца ресурса</td><td><span class="v">✓</span>Твой Person Server и сервер доступа сервиса договариваются между собой</td></tr>
@@ -486,16 +538,35 @@ footer ul{padding-left:18px;display:grid;gap:4px}
   </div>
 </section>
 
-<!-- 9. STATUS -->
+<!-- 9. FAQ -->
+<section class="ch" id="faq">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">09 · ВОПРОСЫ</span>
+      <h2>Частые вопросы</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Это уже можно использовать?</summary><p>Попробовать можно: есть SDK для TypeScript, .NET, Python и Go, расширение для Keycloak, готовый Person Server и демо-песочницы (AAuth Explorer, AAuth Web Agent). Но это черновик, а не стандарт. Между версиями меняются названия полей и даже число режимов, так что для боевых систем пока рано.</p></details>
+      <details><summary>Это замена OAuth?</summary><p>Нет, скорее надстройка для мира агентов. Обычные приложения с OAuth продолжат работать как раньше. Сервис может спрятать свой OAuth-токен внутрь сессионного токена AAuth, а Person Server может логинить людей через OpenID Connect.</p></details>
+      <details><summary>Что изменится для обычного человека?</summary><p>Появится место, где видно всех твоих агентов: какие подключены, на каких устройствах, какие у них задания и что они уже сделали. Там же можно ответить на вопрос агента, разрешить или запретить действие и отозвать доступ. Это и есть Person Server.</p></details>
+      <details><summary>А если украдут сам секретный ключ агента?</summary><p>Тогда провайдер агента перестаёт выдавать ему паспорт и отзывает текущий через Person Server. Паспорт живёт не больше суток, токен личности не больше часа. Есть слабое место: сервис, который пускает агента только по паспорту (режим 1), сообщения об отзыве не получает. Там доступ закончится, когда истечёт паспорт.</p></details>
+      <details><summary>Как это связано с MCP?</summary><p>MCP сейчас использует OAuth 2.1 и динамическую регистрацию клиентов: на каждом сервере у агента новый client_id, а токены на предъявителя. Автор AAuth приводит MCP как пример, где эти ограничения уже мешают. Для MCP-серверов уже есть реализации AAuth: TypeScript SDK для MCP-серверов и модуль для Envoy и agentgateway, который превращает MCP-сервис в AAuth-ресурс.</p></details>
+      <details><summary>Кто будет моим Person Server?</summary><p>Его выбираешь ты сам, его никто не навязывает. Это может быть сервис твоего провайдера входа, твоя компания (один сервер выполняет роли провайдера агентов, Person Server и Access Server для сотрудников) или даже свой собственный сервер. В спецификации есть раздел о том, как сделать минимальный Person Server.</p></details>
+      <details><summary>Зачем целых пять режимов? Не слишком сложно?</summary><p>Каждый сервис берёт только то, что ему нужно, и не обязан внедрять всё сразу. Обычно большинство адресов работают по личности агента или человека, и только несколько важных действий (оплата, запись, удаление) требуют полноценного разрешения.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 10. STATUS -->
 <section class="ch" id="status">
   <div class="wrap">
     <div class="ch-head">
-      <span class="num">09 · СТАТУС</span>
+      <span class="num">10 · СТАТУС</span>
       <h2>Где протокол сейчас</h2>
-      <p class="lead">Это личный черновик (Internet-Draft), а не принятый стандарт. Детали меняются от версии к версии: только в -11 режимов стало пять вместо четырёх.</p>
+      <p class="lead">Это личный черновик (Internet-Draft), а не принятый стандарт. Детали меняются от версии к версии: только в -11 появился токен личности, и режимов стало пять вместо четырёх.</p>
     </div>
     <div class="status">
-      <div><span>Версия</span><b>-11</b><span>12-я ревизия с 2025 года</span></div>
+      <div><span>Версия</span><b>-11</b><span>12-я ревизия (00–11), раньше назывался draft-hardt-aauth-protocol</span></div>
       <div><span>Опубликована</span><b>25.09.2026</b><span>истекает 29.03.2027</span></div>
       <div><span>Автор</span><b>Dick Hardt</b><span>Hellō, редактор OAuth 2.0 (RFC 6749)</span></div>
       <div><span>Опирается на</span><b>RFC 9421</b><span>HTTP Message Signatures + Signature-Key</span></div>
@@ -514,7 +585,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
       <li><a href="https://www.aauth.dev">aauth.dev</a> и <a href="https://explorer.aauth.dev">AAuth Explorer</a></li>
       <li><a href="https://datatracker.ietf.org/doc/draft-hardt-httpbis-signature-key/">HTTP Signature Keys</a></li>
     </ul>
-    <p style="margin-top:14px">Схемы упрощены. Названия полей и сообщений взяты из версии -11.</p>
+    <p style="margin-top:14px">Неофициальная инфографика. Не связана с IETF и автором протокола. Схемы упрощены, названия полей и сообщений взяты из версии -11.</p>
   </div>
 </footer>
 
@@ -540,14 +611,22 @@ const A = {
 /* ---------- 1. STEAL DEMO ---------- */
 let stMode="old", stBusy=false;
 const stSvg=$("#steal-svg");
-const P={agent:[70,90], res:[490,90], thief:[280,240]};
+let SW=560, P={};
+function stLayout(){
+  SW = stSvg.parentElement.clientWidth < 460 ? 360 : 560;
+  stSvg.setAttribute("viewBox",`0 0 ${SW} 320`);
+  P={agent:[56,120], res:[SW-56,120], thief:[SW/2,262]};
+}
 function stDraw(){
+  stLayout();
   stSvg.innerHTML="";
-  el("line",{x1:110,y1:90,x2:450,y2:90,stroke:"var(--line)","stroke-width":2,"stroke-dasharray":"5 6"},stSvg);
-  [["agent",A.agent],["res",A.res]].forEach(([k,a])=>{ const [x,y]=P[k]; el("circle",{cx:x,cy:y,r:36,style:"fill:"+a.s+";stroke:"+a.c,"stroke-width":2},stSvg); icon(stSvg,a.i,x,y,34,a.c); el("text",{x,y:y+56,"text-anchor":"middle",class:"lbl",style:"fill:var(--ink);font:600 14px var(--f-body)",text:a.name},stSvg); });
-  const [tx,ty]=P.thief; el("circle",{cx:tx,cy:ty,r:32,style:"fill:var(--s-thief);stroke:var(--c-thief)","stroke-width":2},stSvg); icon(stSvg,"thief",tx,ty,30,"var(--c-thief)"); el("text",{x:tx+46,y:ty+5,style:"fill:var(--c-thief);font:600 14px var(--f-body)",text:"Воришка"},stSvg);
-  if(stMode==="new"){ const g=el("g",{},stSvg); icon(g,"key",P.agent[0]-38,P.agent[1]-36,22,"var(--c-agent)"); el("text",{x:P.agent[0]-20,y:P.agent[1]-46,style:"fill:var(--muted);font:500 11px var(--f-body)",text:"ключ только у агента"},stSvg); }
-  el("text",{x:280,y:72,"text-anchor":"middle",style:"fill:var(--muted);font:500 12px var(--f-mono)",text: stMode==="old"?"Authorization: Bearer sk_live_9f2…":"Signature + Signature-Key: jwt=…"},stSvg);
+  const [ax,ay]=P.agent, [rx,ry]=P.res;
+  el("line",{x1:ax+40,y1:ay,x2:rx-40,y2:ay,stroke:"var(--line)","stroke-width":2,"stroke-dasharray":"5 6"},stSvg);
+  [["agent",A.agent],["res",A.res]].forEach(([k,a])=>{ const [x,y]=P[k]; el("circle",{cx:x,cy:y,r:34,style:"fill:"+a.s+";stroke:"+a.c,"stroke-width":2},stSvg); icon(stSvg,a.i,x,y,32,a.c); el("text",{x,y:y+54,"text-anchor":"middle",style:"fill:var(--ink);font:600 14px var(--f-body)",text:a.name},stSvg); });
+  const [tx,ty]=P.thief; el("circle",{cx:tx,cy:ty,r:30,style:"fill:var(--s-thief);stroke:var(--c-thief)","stroke-width":2},stSvg); icon(stSvg,"thief",tx,ty,28,"var(--c-thief)"); el("text",{x:tx+40,y:ty+5,style:"fill:var(--c-thief);font:600 14px var(--f-body)",text:"Воришка"},stSvg);
+  if(stMode==="new"){ icon(stSvg,"key",ax-24,ay-50,20,"var(--c-agent)"); el("text",{x:ax-10,y:ay-45,style:"fill:var(--muted);font:500 12px var(--f-body)",text:"ключ только у агента"},stSvg); }
+  const hdr = stMode==="old" ? (SW<500?"Bearer sk_live_9f2…":"Authorization: Bearer sk_live_9f2…") : (SW<500?"подпись + паспорт":"Signature + Signature-Key: jwt=…");
+  el("text",{x:SW/2,y:ay-14,"text-anchor":"middle",style:"fill:var(--muted);font:500 12px var(--f-mono)",text:hdr},stSvg);
 }
 function stVerdict(state){
   const v=$("#st-verdict");
@@ -559,41 +638,53 @@ function stVerdict(state){
 }
 function stRun(){
   if(stBusy) return; stBusy=true; stDraw(); stVerdict("idle");
-  const color = stMode==="old" ? "var(--c-agent)" : "var(--c-agent)";
-  const e=envelope(stSvg,color);
-  anim(1000,p=>{ e.setAttribute("transform",`translate(${110+p*340},90)`); },()=>{
+  const [ax,ay]=P.agent, [rx,ry]=P.res, [tx,ty]=P.thief, mid=SW/2;
+  $("#st-run").disabled=true;
+  const e=envelope(stSvg,"var(--c-agent)");
+  anim(1000,p=>{ e.setAttribute("transform",`translate(${ax+40+p*(rx-ax-80)},${ay})`); },()=>{
+    e.remove();
     const c=envelope(stSvg,"var(--c-thief)");
-    anim(800,p=>{ c.setAttribute("transform",`translate(${280},${90+p*112})`); },()=>{
-      el("text",{x:330,y:180,style:"fill:var(--c-thief);font:600 12px var(--f-body)",text:"копия токена"},stSvg);
+    el("text",{x:mid-14,y:ay+62,"text-anchor":"end",style:"fill:var(--c-thief);font:600 12px var(--f-body)",text:"копия токена"},stSvg);
+    anim(800,p=>{ c.setAttribute("transform",`translate(${mid},${ay+p*(ty-ay-44)})`); },()=>{
       setTimeout(()=>{
-        const line=el("line",{x1:305,y1:222,x2:305,y2:222,stroke:"var(--c-thief)","stroke-width":2.5},stSvg);
-        anim(1000,p=>{ const x=305+p*155, y=222-p*100; line.setAttribute("x2",x); line.setAttribute("y2",y); c.setAttribute("transform",`translate(${x},${y})`); },()=>{
-          const ok = stMode==="old";
-          const g=el("g",{transform:"translate(490,170)"},stSvg);
-          el("rect",{x:-62,y:-18,width:124,height:36,rx:18,style:"fill:"+(ok?"var(--bad)":"var(--good)")},g);
+        const sx=tx+24, sy=ty-20, ex=rx-22, ey=ry+28;
+        const line=el("line",{x1:sx,y1:sy,x2:sx,y2:sy,stroke:"var(--c-thief)","stroke-width":2.5},stSvg);
+        anim(1000,p=>{ const x=sx+p*(ex-sx), y=sy+p*(ey-sy); line.setAttribute("x2",x); line.setAttribute("y2",y); c.setAttribute("transform",`translate(${x},${y})`); },()=>{
+          c.remove();
+          const ok = stMode==="old", px=Math.min(rx, SW-66);
+          const g=el("g",{transform:`translate(${px},${ry-62})`},stSvg);
+          el("rect",{x:-62,y:-17,width:124,height:34,rx:17,style:"fill:"+(ok?"var(--bad)":"var(--good)")},g);
           el("text",{x:0,y:5,"text-anchor":"middle",style:"fill:#fff;font:700 13px var(--f-body)",text: ok?"200 OK, входи":"401 Отказ"},g);
-          stVerdict("done"); stBusy=false;
+          stVerdict("done"); stBusy=false; $("#st-run").disabled=false; $("#st-run").textContent="Ещё раз";
         });
       },300);
     });
   });
 }
-function stSet(m){ stMode=m; $("#st-old").setAttribute("aria-pressed",m==="old"); $("#st-new").setAttribute("aria-pressed",m==="new"); stDraw(); stVerdict("idle"); }
+function stSet(m){ stMode=m; $("#st-old").setAttribute("aria-pressed",m==="old"); $("#st-new").setAttribute("aria-pressed",m==="new"); $("#st-run").textContent="Воришка перехватывает токен"; stDraw(); stVerdict("idle"); }
 $("#st-old").onclick=()=>{ if(!stBusy) stSet("old"); };
 $("#st-new").onclick=()=>{ if(!stBusy) stSet("new"); };
 $("#st-run").onclick=stRun;
 stSet("old");
 
 /* ---------- 2. ROLES ---------- */
-const RP={person:[380,58], ps:[230,190], as:[580,190], ap:[90,345], agent:[330,345], res:[600,345]};
+/* two hand-placed layouts: wide (760×450) and narrow (360×580); label positions avoid nodes and each other */
+const RL={
+  wide:{vb:"0 0 760 450", r:34,
+    p:{person:[380,60], ps:[200,200], as:[560,200], ap:[80,370], agent:[330,370], res:[600,370]},
+    l:[[362,166],[282,124],[392,200],[255,288],[205,370],[466,370],[592,288]]},
+  narrow:{vb:"0 0 360 580", r:30,
+    p:{person:[180,52], ps:[80,196], as:[280,196], agent:[180,350], ap:[66,496], res:[294,496]},
+    l:[[180,240],[108,154],[180,196],[146,298],[112,436],[254,446],[288,352]]},
+};
 const RE=[
-  ["person","agent","поручает задачу",true],
-  ["person","ps","миссии и согласие"],
-  ["ps","as","федерация"],
-  ["agent","ps","токены личности и пропуска"],
-  ["ap","agent","паспорт"],
-  ["agent","res","подписанные запросы"],
-  ["as","res","работает на сервис",true],
+  {a:"person",b:"agent",l:"поручает задачу",ln:"поручает",dash:true},
+  {a:"person",b:"ps",l:"миссии и согласие"},
+  {a:"ps",b:"as",l:"федерация"},
+  {a:"agent",b:"ps",l:"токены личности и пропуска",ln:"токены и пропуска"},
+  {a:"ap",b:"agent",l:"паспорт"},
+  {a:"agent",b:"res",l:"подписанные запросы"},
+  {a:"as",b:"res",l:"работает на сервис",dash:true},
 ];
 const RD={
   person:{t:"Ты или твоя компания. От твоего имени работает агент, и ты за него отвечаешь. Ты одобряешь миссии и даёшь согласие на доступ.", a:"Хозяин, который дал курьеру поручение."},
@@ -605,26 +696,30 @@ const RD={
 };
 const rSvg=$("#roles-svg"); let rSel="ps";
 function rDraw(){
+  const L = rSvg.parentElement.clientWidth < 520 ? RL.narrow : RL.wide, RP=L.p, R=L.r, nar=L===RL.narrow;
+  rSvg.setAttribute("viewBox",L.vb);
   rSvg.innerHTML="";
-  const conn = k => RE.filter(e=>e[0]===k||e[1]===k);
-  RE.forEach(e=>{
-    const [a,b,l,dash]=e; const [x1,y1]=RP[a],[x2,y2]=RP[b];
-    const on = e[0]===rSel||e[1]===rSel;
-    const g=el("g",{class:"edge"+(on?"":" dim")},rSvg);
-    el("line",{x1,y1,x2,y2,stroke:on?A[rSel].c:"var(--muted)","stroke-width":on?2.5:1.5,"stroke-dasharray":dash?"5 6":"none"},g);
-    const mx=(x1+x2)/2, my=(y1+y2)/2;
-    const w=l.length*6.6+16;
-    el("rect",{x:mx-w/2,y:my-11,width:w,height:22,rx:11,style:"fill:var(--surface);stroke:var(--line)"},g);
-    el("text",{x:mx,y:my+4,"text-anchor":"middle",style:"fill:var(--ink);font:500 11.5px var(--f-body)",text:l},g);
+  const conn = k => RE.filter(e=>e.a===k||e.b===k);
+  const labels=el("g",{},null);
+  RE.forEach((e,i)=>{
+    const {a,b,dash}=e, l=(nar&&e.ln)?e.ln:e.l;
+    const [x1,y1]=RP[a],[x2,y2]=RP[b];
+    const on = a===rSel||b===rSel;
+    el("line",{x1,y1,x2,y2,class:"edge"+(on?"":" dim"),stroke:on?A[rSel].c:"var(--muted)","stroke-width":on?2.5:1.5,"stroke-dasharray":dash?"5 6":"none"},rSvg);
+    const [mx,my]=L.l[i], w=l.length*6.9+18;
+    const g=el("g",{class:"edge"+(on?"":" dim")},labels);
+    el("rect",{x:mx-w/2,y:my-11,width:w,height:22,rx:11,style:"fill:var(--surface);stroke:"+(on?A[rSel].c:"var(--line)")},g);
+    el("text",{x:mx,y:my+4.5,"text-anchor":"middle",style:"fill:var(--ink);font:500 12px var(--f-body)",text:l},g);
   });
-  const near=new Set([rSel]); conn(rSel).forEach(e=>{near.add(e[0]);near.add(e[1]);});
+  rSvg.appendChild(labels);
+  const near=new Set([rSel]); conn(rSel).forEach(e=>{near.add(e.a);near.add(e.b);});
   Object.keys(RP).forEach(k=>{
     const [x,y]=RP[k], a=A[k];
     const g=el("g",{class:"node"+(near.has(k)?"":" dim"),tabindex:0,role:"button","aria-label":a.name},rSvg);
-    el("circle",{cx:x,cy:y,r:34,style:"fill:"+a.s+";stroke:"+a.c,"stroke-width":k===rSel?4:2},g);
-    icon(g,a.i,x,y,32,a.c);
-    el("text",{x,y:y+52,"text-anchor":"middle",style:"fill:var(--ink);font:700 13.5px var(--f-body)",text:a.name},g);
-    el("text",{x,y:y+67,"text-anchor":"middle",style:"fill:var(--muted);font:400 11px var(--f-body)",text:a.sub},g);
+    el("circle",{cx:x,cy:y,r:R,style:"fill:"+a.s+";stroke:"+a.c,"stroke-width":k===rSel?4:2},g);
+    icon(g,a.i,x,y,R*.95,a.c);
+    el("text",{x,y:y+R+18,"text-anchor":"middle",style:"fill:var(--ink);font:700 14px var(--f-body)",text:a.name},g);
+    el("text",{x,y:y+R+33,"text-anchor":"middle",style:"fill:var(--muted);font:400 12px var(--f-body)",text:a.sub},g);
     g.addEventListener("click",()=>rPick(k));
     g.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault(); rPick(k);} });
   });
@@ -649,17 +744,17 @@ const TOK=[
   {n:"Заявка", tech:"resource token · aa-resource+jwt", c:"var(--c-res)", from:"Сервис", life:"≤ 5 мин", says:"«Я, сервис X, прошу для человека Y и агента с ключом Z права calendar.write». Агент несёт её своему Person Server.",
    json:`{\n  "iss": "https://resource.example",\n  "aud": "https://ps.example",\n  "ps":  "https://ps.example",\n  "sub": "8f14e45f…",\n  "agent_jkt": "NzbLsXh8…",\n  "presented_jti": "pt-3ab910",\n  "scope": "calendar.write"\n}`},
   {n:"Пропуск", tech:"auth token · aa-auth+jwt", c:"var(--c-as)", from:"Person Server или Access Server", life:"не дольше токена-основания", says:"«Разрешено: вот права и данные о человеке». С ним агент выполняет нужное действие.",
-   json:`{\n  "iss": "https://as.resource.example",\n  "aud": "https://resource.example",\n  "sub": "8f14e45f…",\n  "scope": "calendar.write",\n  "cnf": { "jwk": { … ключ агента … } }\n}`},
+   json:`{\n  "iss": "https://as.resource.example",\n  "aud": "https://resource.example",\n  "ps":  "https://ps.example",\n  "sub": "8f14e45f…",\n  "scope": "calendar.write",\n  "cnf": { "jwk": { … ключ агента … } }\n}`},
   {n:"Сессионный токен", tech:"session token · AAuth-Access", c:"var(--c-res)", from:"Сервис, для себя", life:"на усмотрение сервиса", says:"Сервис заворачивает в него свой обычный OAuth или сессию. Работает только вместе с подписью агента. Новый приходит в любом ответе, отдельного refresh нет.",
    json:`HTTP/1.1 200 OK\nAAuth-Access: wrapped-session-token-value\n\nGET /api/data\nAuthorization: AAuth wrapped-session-token-value\nSignature: sig=:…:`},
 ];
-$("#tok-list").innerHTML=TOK.map(t=>`<article class="tok" style="--tc:${t.c}">
-  <div class="tt"><h3>${t.n}</h3><span class="life">${t.life}</span></div>
-  <span class="tech">${t.tech}</span>
-  <p class="from">Выдаёт: <b>${t.from}</b></p>
-  <p class="says">${t.says}</p>
-  <details><summary>Заглянуть внутрь →</summary><pre>${t.json}</pre></details>
-</article>`).join("");
+$("#tok-list").innerHTML=TOK.map((t,i)=>{
+  const head=`<h3>${t.n}</h3><div class="meta"><span class="life">живёт ${t.life}</span><span class="tech">${t.tech}</span></div><p class="from">Выдаёт: <b>${t.from}</b></p>`;
+  const body=`<p class="says">${t.says}</p><details><summary>Заглянуть внутрь →</summary><pre>${t.json}</pre></details>`;
+  return i===TOK.length-1
+    ? `<article class="tok wide" style="--tc:${t.c}"><div class="side">${head}</div><div class="side">${body}</div></article>`
+    : `<article class="tok" style="--tc:${t.c}">${head}${body}</article>`;
+}).join("");
 
 /* ---------- 4. MODES PLAYER ---------- */
 const MODES=[
@@ -689,7 +784,7 @@ const MODES=[
   actors:["person","agent","res","ps"],
   steps:[
    {f:"agent",t:"ps",l:"дай токен личности для resource.example",c:"var(--c-agent)",cap:"Агент просит свой Person Server: «Подтверди сервису, за кого я работаю».",d:"POST /person {\"resource\":\"https://resource.example\"}"},
-   {f:"ps",t:"person",l:"пустить агента от твоего имени?",c:"var(--c-ps)",cap:"При первом обращении к этому сайту Person Server спрашивает тебя. Вопрос звучит не «можно назвать твоё имя?», а «можно ли агенту действовать там от твоего имени?».",d:"202 + requirement=interaction (только если нужно)"},
+   {f:"ps",t:"person",l:"пустить агента от твоего имени?",c:"var(--c-ps)",cap:"Если агент идёт на этот сайт впервые, Person Server может спросить тебя. Вопрос звучит не «можно назвать твоё имя?», а «можно ли агенту действовать там от твоего имени?».",d:"202 + requirement=interaction (только если нужно)"},
    {f:"person",t:"ps",l:"да",c:"var(--c-person)",cap:"Ты соглашаешься.",d:""},
    {f:"ps",t:"agent",l:"токен личности (для одного сайта)",c:"var(--c-ps)",cap:"Person Server выдаёт токен личности. Для каждого сайта у тебя свой псевдоним, так что сайты не могут сопоставить тебя между собой. Прав этот токен не даёт.",d:"person token · aud=resource.example · sub=8f14e45f… · ≤ 1 ч"},
    {f:"agent",t:"res",l:"запрос + подпись + токен личности",c:"var(--c-agent)",cap:"Агент подписывает запрос и прикладывает токен личности вместо паспорта.",d:"Signature-Key: sig=jwt; jwt=<person token>"},
@@ -729,35 +824,50 @@ function tabs(){
   $("#mode-tabs").innerHTML=MODES.map((m,i)=>`<button class="mtab" role="tab" aria-pressed="${i===mi}" data-i="${i}"><span class="n">${m.n}</span><b>${m.t}</b><span class="k">${m.k}</span><span class="dots">${m.actors.map(a=>`<i style="background:${A[a].c}" title="${A[a].name}"></i>`).join("")}</span></button>`).join("");
   $("#mode-tabs").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{ mi=+b.dataset.i; si=0; stopAuto(); tabs(); render(true); });
 }
-function laneX(m){ const n=m.actors.length, W=900, pad=95; const out={}; m.actors.forEach((a,i)=>out[a]= n===1?W/2: pad+i*(W-2*pad)/(n-1)); return out; }
+/* wide: fixed 900-unit canvas scaled to fit; compact (phones): canvas = real pixel width, so text stays readable */
+const SHORT={ap:"Провайдер"};
+function geo(m){
+  const avail=$("#seqbox").clientWidth-16, compact=avail<620;
+  const W=compact?Math.max(300,avail):900, pad=compact?44:95, n=m.actors.length, X={};
+  m.actors.forEach((a,i)=>X[a]=pad+i*(W-2*pad)/(n-1));
+  return {W,X,compact,rowH:compact?50:56,top:compact?108:104,cw:compact?6.5:6.9,fs:compact?12:13};
+}
+function clampX(x,w,W){ return Math.min(Math.max(x,w/2+3),W-w/2-3); }
 function render(animate){
-  const m=MODES[mi], X=laneX(m), N=m.steps.length, rowH=56, top=104, H=top+N*rowH+10;
-  seq.setAttribute("viewBox",`0 0 900 ${H}`);
+  const m=MODES[mi], G=geo(m), {W,X,compact,rowH,top,cw,fs}=G, N=m.steps.length, H=top+N*rowH+6;
+  seq.setAttribute("viewBox",`0 0 ${W} ${H}`);
   seq.innerHTML="";
+  const span=(W-2*(compact?44:95))/(m.actors.length-1);
   m.actors.forEach(a=>{ const x=X[a], ac=A[a];
-    el("line",{x1:x,y1:72,x2:x,y2:H-6,stroke:"var(--line)","stroke-width":2,"stroke-dasharray":"4 6"},seq);
-    el("rect",{x:x-82,y:8,width:164,height:58,rx:14,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
-    icon(seq,ac.i,x-56,37,26,ac.c);
-    el("text",{x:x-38,y:34,class:"hdr",style:"fill:var(--ink)",text:ac.name},seq);
-    el("text",{x:x-38,y:50,class:"hsub",style:"fill:var(--muted)",text:ac.sub},seq);
+    el("line",{x1:x,y1:72,x2:x,y2:H-4,stroke:"var(--line)","stroke-width":2,"stroke-dasharray":"4 6"},seq);
+    if(compact){
+      const bw=Math.min(span-6,104);
+      el("rect",{x:x-bw/2,y:6,width:bw,height:62,rx:12,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
+      icon(seq,ac.i,x,27,24,ac.c);
+      el("text",{x,y:57,"text-anchor":"middle",style:"fill:var(--ink);font:700 10.5px var(--f-body)",text:SHORT[a]||ac.name},seq);
+    } else {
+      el("rect",{x:x-82,y:8,width:164,height:58,rx:14,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
+      icon(seq,ac.i,x-56,37,26,ac.c);
+      el("text",{x:x-38,y:34,class:"hdr",style:"fill:var(--ink)",text:ac.name},seq);
+      el("text",{x:x-38,y:50,class:"hsub",style:"fill:var(--muted)",text:ac.sub},seq);
+    }
   });
   m.steps.forEach((s,i)=>{
     if(i>si) return;
-    const y=top+i*rowH, cur=i===si, op=cur?1:.42;
-    const g=el("g",{opacity:op},seq);
+    const y=top+i*rowH, cur=i===si;
+    const g=el("g",{opacity:cur?1:.5},seq);
     if(s.f===s.t){
-      const x=X[s.f], w=Math.max(150,s.l.length*7+30);
-      el("rect",{x:x-w/2,y:y-17,width:w,height:34,rx:10,style:`fill:var(--surface);stroke:${s.c}`,"stroke-width":cur?2.5:1.5,"stroke-dasharray":"5 4"},g);
-      el("text",{x,y:y+5,"text-anchor":"middle",class:"lbl",style:"fill:var(--ink)",text:s.l},g);
+      const w=Math.max(compact?120:150,s.l.length*cw+28), x=clampX(X[s.f],w,W);
+      el("rect",{x:x-w/2,y:y-16,width:w,height:32,rx:10,style:`fill:var(--surface);stroke:${s.c}`,"stroke-width":cur?2.5:1.5,"stroke-dasharray":"5 4"},g);
+      el("text",{x,y:y+4.5,"text-anchor":"middle",style:`fill:var(--ink);font:600 ${fs}px var(--f-body)`,text:s.l},g);
       return;
     }
     const x1=X[s.f], x2=X[s.t], dir=Math.sign(x2-x1), sx=x1+dir*8, ex=x2-dir*10;
     const line=el("line",{x1:sx,y1:y,x2:sx,y2:y,stroke:s.c,"stroke-width":cur?3:2,"stroke-linecap":"round"},g);
     const head=el("path",{d:`M${ex} ${y-6} L${ex+dir*10} ${y} L${ex} ${y+6} Z`,style:`fill:${s.c}`,opacity:0},g);
-    const midx=(x1+x2)/2;
-    const tw=s.l.length*6.9+18;
-    el("rect",{x:midx-tw/2,y:y-30,width:tw,height:20,rx:10,style:"fill:var(--surface)"},g);
-    el("text",{x:midx,y:y-15,"text-anchor":"middle",class:"lbl",style:`fill:${cur?"var(--ink)":"var(--muted)"}`,text:s.l},g);
+    const tw=s.l.length*cw+18, midx=clampX((x1+x2)/2,tw,W);
+    el("rect",{x:midx-tw/2,y:y-29,width:tw,height:20,rx:10,style:"fill:var(--surface)"},g);
+    el("text",{x:midx,y:y-14.5,"text-anchor":"middle",style:`fill:var(--ink);font:${cur?700:500} ${fs}px var(--f-body)`,text:s.l},g);
     const done=()=>{ line.setAttribute("x2",ex); head.setAttribute("opacity",1); };
     if(cur && animate){
       const env=envelope(seq,s.c);
@@ -778,14 +888,14 @@ function render(animate){
 }
 function next(){ const N=MODES[mi].steps.length; if(si<N-1){ si++; render(true); return true;} return false; }
 function prev(){ if(si>0){ si--; render(false);} }
-function stopAuto(){ if(autoT){ clearInterval(autoT); autoT=null; } $("#pl-auto").textContent="▶ Автоплей"; }
+function stopAuto(){ if(autoT){ clearInterval(autoT); autoT=null; } $("#pl-auto").innerHTML='▶ <span class="hide-s">Автоплей</span>'; }
 $("#pl-next").onclick=()=>{ stopAuto(); next(); };
 $("#pl-prev").onclick=()=>{ stopAuto(); prev(); };
 $("#pl-reset").onclick=()=>{ stopAuto(); si=0; render(true); };
 $("#pl-auto").onclick=()=>{
   if(autoT){ stopAuto(); return; }
   if(si===MODES[mi].steps.length-1){ si=0; render(true); }
-  $("#pl-auto").textContent="⏸ Пауза";
+  $("#pl-auto").innerHTML='⏸ <span class="hide-s">Пауза</span>';
   autoT=setInterval(()=>{ if(!next()) stopAuto(); },2800);
 };
 document.addEventListener("keydown",e=>{
@@ -795,34 +905,35 @@ document.addEventListener("keydown",e=>{
   if(e.key==="ArrowLeft"){ stopAuto(); prev(); e.preventDefault(); }
 });
 function ladder(){
-  $("#ladder").innerHTML=MODES.map((m,i)=>`<div style="${i===mi?'border-color:var(--accent)':''}"><div class="bar" style="--h:${m.h*0.9}px"></div><b>${m.n}</b><span>${m.knows}</span></div>`).join("");
+  $("#ladder").innerHTML=MODES.map((m,i)=>`<div data-i="${i}" role="button" tabindex="0" style="${i===mi?'border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset':''}"><div class="bar" style="--h:${m.h*0.9}px"></div><b>${m.n} · ${m.t}</b><span>${m.knows}</span></div>`).join("");
+  $("#ladder").querySelectorAll("[data-i]").forEach(d=>{ const go=()=>{ mi=+d.dataset.i; si=0; stopAuto(); tabs(); render(true); $("#mode-tabs").scrollIntoView({block:"start"}); }; d.onclick=go; d.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } }; });
 }
 tabs(); render(false);
 
 /* ---------- 5. LOOP ---------- */
 const REQ=[
  {code:"agent-token", st:"401", need:"знать, какой это агент", act:"прикладывает свой паспорт", c:"var(--c-ap)"},
- {code:"interaction", st:"202", need:"чтобы человек зашёл на страницу сервиса", act:"даёт тебе ссылку и код, потом ждёт", c:"var(--c-person)"},
+ {code:"interaction", st:"202", need:", чтобы человек зашёл на страницу сервиса", act:"даёт тебе ссылку и код, потом ждёт", c:"var(--c-person)"},
  {code:"person-token", st:"401", need:"знать, за какого человека работает агент", act:"берёт токен личности у своего Person Server", c:"var(--c-ps)"},
  {code:"auth-token", st:"401 / 202", need:"согласие или проверку правил для конкретных прав", act:"несёт приложенную заявку своему Person Server и получает пропуск", c:"var(--c-as)"},
 ];
 let rq=3;
 function loopDraw(){
   const s=$("#loop-svg"); s.innerHTML="";
-  const cx=160, cy=160, R=112;
-  const pts=[["Запрос",-90,"var(--c-agent)"],["Ответ:\nчто нужно",0,"var(--c-res)"],["Выполнить\nтребование",90,REQ[rq].c],["Повтор",180,"var(--c-agent)"]];
-  el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--line)","stroke-width":10},s);
-  const arc=el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--accent)","stroke-width":10,"stroke-dasharray":`60 ${2*Math.PI*R-60}`,"stroke-linecap":"round",transform:`rotate(-90 ${cx} ${cy})`},s);
-  if(!reduce){ const a=el("animateTransform",{attributeName:"transform",type:"rotate",from:`-90 ${cx} ${cy}`,to:`270 ${cx} ${cy}`,dur:"4s",repeatCount:"indefinite"},arc); }
+  const cx=170, cy=170, R=118;
+  const pts=[["Запрос",-90,"var(--c-agent)"],["Ответ:\nчто нужно",0,"var(--c-res)"],["Выполнить",90,REQ[rq].c],["Повтор",180,"var(--c-agent)"]];
+  el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--line)","stroke-width":8},s);
+  const arc=el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--accent)","stroke-width":8,"stroke-dasharray":`70 ${2*Math.PI*R-70}`,"stroke-linecap":"round",transform:`rotate(-90 ${cx} ${cy})`},s);
+  if(!reduce){ el("animateTransform",{attributeName:"transform",type:"rotate",from:`-90 ${cx} ${cy}`,to:`270 ${cx} ${cy}`,dur:"4s",repeatCount:"indefinite"},arc); }
   pts.forEach(([t,ang,c])=>{ const r=ang*Math.PI/180, x=cx+R*Math.cos(r), y=cy+R*Math.sin(r);
-    el("circle",{cx:x,cy:y,r:30,style:`fill:var(--surface);stroke:${c}`,"stroke-width":2.5},s);
-    t.split("\n").forEach((ln,j,arr)=>el("text",{x,y:y+4+(j-(arr.length-1)/2)*12,"text-anchor":"middle",style:"fill:var(--ink);font:600 10.5px var(--f-body)",text:ln},s));
+    el("circle",{cx:x,cy:y,r:38,style:`fill:var(--surface);stroke:${c}`,"stroke-width":2.5},s);
+    t.split("\n").forEach((ln,j,arr)=>el("text",{x,y:y+4.5+(j-(arr.length-1)/2)*14,"text-anchor":"middle",style:"fill:var(--ink);font:600 12px var(--f-body)",text:ln},s));
   });
-  el("text",{x:cx,y:cy-6,"text-anchor":"middle",style:"fill:var(--muted);font:500 11px var(--f-mono)",text:"AAuth-Requirement:"},s);
-  el("text",{x:cx,y:cy+14,"text-anchor":"middle",style:`fill:${REQ[rq].c};font:700 15px var(--f-mono)`,text:REQ[rq].code},s);
+  el("text",{x:cx,y:cy-8,"text-anchor":"middle",style:"fill:var(--muted);font:500 11.5px var(--f-mono)",text:"AAuth-Requirement:"},s);
+  el("text",{x:cx,y:cy+14,"text-anchor":"middle",style:`fill:${REQ[rq].c};font:700 16px var(--f-mono)`,text:REQ[rq].code},s);
 }
 function reqList(){
-  $("#reqs").innerHTML=REQ.map((r,i)=>`<button class="req" data-i="${i}" style="${i===rq?`border-color:${r.c};box-shadow:0 0 0 2px ${r.c} inset`:''}"><code style="color:${r.c}">${r.code}</code><b>Сервису нужно ${r.need}</b><span>Агент ${r.act} · <span class="st">HTTP ${r.st}</span></span></button>`).join("")
+  $("#reqs").innerHTML=REQ.map((r,i)=>`<button class="req" data-i="${i}" style="${i===rq?`border-color:${r.c};box-shadow:0 0 0 2px ${r.c} inset`:''}"><code style="color:${r.c}">${r.code}</code><b>Сервису нужно${r.need[0]===","?"":" "}${r.need}</b><span>Агент ${r.act} · <span class="st">HTTP ${r.st}</span></span></button>`).join("")
    + `<p class="note">Первые два требования обходятся без Person Server. Агент без Person Server может работать только с ними.</p>`;
   $("#reqs").querySelectorAll(".req").forEach(b=>b.onclick=()=>{ rq=+b.dataset.i; reqList(); loopDraw(); });
 }
@@ -836,15 +947,15 @@ const TAG={
 const MS={
  s0:{b:[{w:"agent",h:"<b>Предлагаю миссию</b><br><em>Спланировать и забронировать поездку в Японию на следующий месяц для двоих. Бюджет около $5k. Сначала покажу маршрут, потом бронирую.</em><ul><li>Инструменты: WebSearch, BookFlight, BookHotel</li><li>Сервисы: flights.example, hotels.example</li></ul>"}],
      a:[["Одобрить","good","s2"],["Спросить агента","","s1"]], pill:["idle","На рассмотрении"]},
- s1:{b:[{w:"you",h:"Зачем тебе BookFlight с самого начала?"},{w:"agent",h:"Бронировать буду только после того, как ты одобришь маршрут. Пока мне нужен только поиск.",claim:true}],
+ s1:{b:[{w:"you",h:"Зачем тебе BookFlight с самого начала?"},{w:"agent",h:"Бронировать буду только после того, как ты одобришь маршрут. Для начала хватит поиска и чтения страниц.",claim:true}],
      log:[["chat","Уточнение: «Зачем BookFlight с самого начала?»"]], a:[["Одобрить","good","s2"]]},
- s2:{b:[{w:"ps",h:"<b>Миссия одобрена и запечатана.</b> Для flights.example и hotels.example сразу выданы токены личности, чтобы агент не просил их по одному."}],
-     log:[["mission","Миссия одобрена · действует до 07.05"],["token","Токены личности: flights.example, hotels.example"]], seal:true, pill:["on","Активна"], a:[["Агент начинает работу →","primary","s3"]]},
- s3:{b:[{w:"agent",h:"Поискал рейсы в Токио на май. Нашёл 12 вариантов. Это отправлено в журнал как аудит."},{w:"ps",h:"<b>Агент просит разрешение</b><br><code>SendEmail</code>: отправить тебе маршрут на почту.<br><span class='claim'>Этого инструмента нет в списке одобренных, поэтому спрашиваю тебя.</span>"}],
+ s2:{b:[{w:"ps",h:"<b>Миссия одобрена и запечатана.</b> Одобренные инструменты: WebSearch и Read, на всё остальное агент спросит разрешение. Для flights.example и hotels.example сразу выданы токены личности, чтобы агент не просил их по одному."}],
+     log:[["mission","Миссия одобрена · срок 30 дней"],["token","Токены личности: flights.example, hotels.example"]], seal:true, pill:["on","Активна"], a:[["Агент начинает работу →","primary","s3"]]},
+ s3:{b:[{w:"agent",h:"Поискал рейсы в Токио на май. Нашёл 12 вариантов. Это отправлено в журнал как аудит."},{w:"ps",h:"<b>Агент просит разрешение</b><br><code>SendEmail</code>: отправить тебе маршрут на почту.<br><span class='claim'>SendEmail нет среди одобренных инструментов, поэтому спрашиваю тебя.</span>"}],
      log:[["audit","WebSearch «рейсы в Токио, май» → 12 вариантов"]], a:[["Разрешить","good","s4a"],["Запретить","bad","s4b"]]},
  s4a:{b:[{w:"agent",h:"Маршрут отправлен тебе на почту."}], log:[["perm","SendEmail: разрешено"],["audit","SendEmail → письмо доставлено"]], a:[["Дальше →","primary","s5"]]},
  s4b:{b:[{w:"agent",h:"Понял, письмо не отправляю. Показываю маршрут здесь: 7–14 мая, Токио и Киото."}], log:[["perm","SendEmail: запрещено"]], a:[["Дальше →","primary","s5"]]},
- s5:{b:[{w:"agent",h:"Прошу пропуск для flights.example: «забронировать рейс на 7 мая»."},{w:"ps",h:"<b>Сверил с миссией и журналом.</b> Это укладывается в задачу, а сервис был одобрен заранее. Пропуск выдан, тебя не беспокою."}],
+ s5:{b:[{w:"agent",h:"Прошу пропуск для flights.example: «забронировать рейс на 7 мая»."},{w:"ps",h:"<b>Сверил с миссией и журналом.</b> Бронь рейса укладывается в задачу, а сервис ты одобрил заранее. Пропуск выдан, тебя не беспокою.<br><span class='claim'>Бронирование идёт через сервис flights.example, поэтому вместо разрешения на инструмент здесь работает пропуск от сервиса.</span>"}],
      log:[["token","Пропуск для flights.example: выдан автоматически"],["audit","BookFlight → 2 билета, 7 и 14 мая"]], a:[["Дальше →","primary","s6"]]},
  s6:{b:[{w:"agent",h:"<b>Изменение в работе</b><br>Отель из маршрута занят. Предлагаю похожий в двух кварталах по той же цене."}],
      log:[], a:[["Принять изменение","good","s6b"]]},
@@ -878,6 +989,17 @@ function msGo(id){
   if(s.pill) setPill(s.pill[0],s.pill[1]);
 }
 msReset();
+
+/* ---------- RESIZE + NAV ---------- */
+let rzT=null, lastW=document.documentElement.clientWidth;
+function relayout(){ const w=document.documentElement.clientWidth; if(w===lastW) return; lastW=w; if(!stBusy) stDraw(); rDraw(); render(false); }
+const onRz=()=>{ clearTimeout(rzT); rzT=setTimeout(relayout,120); };
+if("ResizeObserver" in window) new ResizeObserver(onRz).observe(document.documentElement); else addEventListener("resize",onRz);
+const navLinks=[...document.querySelectorAll('nav.top a[href^="#"]:not(.brand)')];
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ navLinks.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id)); const on=navLinks.find(a=>a.classList.contains("on")); if(on){ const bar=on.parentElement; bar.scrollTo({left:on.offsetLeft-bar.clientWidth/2+on.clientWidth/2,behavior:"smooth"}); } } }); },{rootMargin:"-45% 0px -50% 0px"});
+  document.querySelectorAll("section.ch").forEach(s=>io.observe(s));
+}
 })();
 </script>
 
