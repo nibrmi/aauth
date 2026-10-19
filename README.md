@@ -3,7 +3,7 @@
 **An interactive visual guide to AAuth, the IETF draft protocol for AI agent authorization.**
 
 👉 **English:** https://nibrmi.github.io/aauth/en/
-👉 **Русский:** https://nibrmi.github.io/aauth/
+👉 **Русский:** https://nibrmi.github.io/aauth/ru/
 
 [![AAuth Explained](og-en.png)](https://nibrmi.github.io/aauth/en/)
 
@@ -35,4 +35,4 @@ The Russian page is the source. `tools/en.txt` holds the English translation, on
 python tools/build.py src/ru.html
 ```
 
-This writes `index.html` and `en/index.html`, and fails if a translation no longer matches the source or any Russian text is left on the English page.
+This writes `ru/index.html`, `en/index.html` and `index.html` (a copy of the Russian page for old links), and fails if a translation no longer matches the source or any Russian text is left on the English page.

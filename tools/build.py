@@ -2,7 +2,7 @@
 
     python tools/build.py path/to/source-ru.html
 
-Writes index.html (Russian), en/index.html (English, via tools/en.txt) and a copy of
+Writes ru/index.html and index.html (Russian), en/index.html (English, via tools/en.txt) and a copy of
 the source to src/ru.html. Fails if a translation pair no longer matches the source or
 if any Cyrillic text is left untranslated in the English page.
 """
@@ -68,11 +68,13 @@ def main():
     src_path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "src", "ru.html")
     src = read(src_path)
     pairs = load_pairs(os.path.join(ROOT, "tools", "en.txt"))
+    # /ru/ is the canonical Russian URL; the site root serves the same page for old links
+    write(os.path.join(ROOT, "ru", "index.html"), wrap(src, "ru"))
     write(os.path.join(ROOT, "index.html"), wrap(src, "ru"))
     write(os.path.join(ROOT, "en", "index.html"), wrap(translate(src, pairs), "en"))
     if os.path.abspath(src_path) != os.path.join(ROOT, "src", "ru.html"):
         write(os.path.join(ROOT, "src", "ru.html"), src)
-    print("built index.html and en/index.html from %d translation pairs" % len(pairs))
+    print("built ru/, index.html and en/ from %d translation pairs" % len(pairs))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AAuth на пальцах</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Интерактивная инфографика по протоколу AAuth: паспорт и подпись для ИИ-агентов, пять режимов доступа, миссии и сравнение с OAuth.">
+<meta property="og:title" content="AAuth на пальцах">
+<meta property="og:description" content="Как ИИ-агенту представиться, получить разрешение и не утащить чужие ключи. Интерактивная инфографика по черновику IETF.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nibrmi.github.io/aauth/ru/">
+<meta property="og:image" content="https://nibrmi.github.io/aauth/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="canonical" href="https://nibrmi.github.io/aauth/ru/">
+<link rel="alternate" hreflang="ru" href="https://nibrmi.github.io/aauth/ru/">
+<link rel="alternate" hreflang="en" href="https://nibrmi.github.io/aauth/en/">
+<link rel="alternate" hreflang="x-default" href="https://nibrmi.github.io/aauth/en/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AAuth на пальцах","inLanguage":"ru","url":"https://nibrmi.github.io/aauth/ru/","description":"Интерактивная инфографика по протоколу AAuth: паспорт и подпись для ИИ-агентов, пять режимов доступа, миссии и сравнение с OAuth.","about":{"@type":"Thing","name":"AAuth protocol","sameAs":"https://datatracker.ietf.org/doc/draft-hardt-oauth-aauth-protocol/"},"image":"https://nibrmi.github.io/aauth/og.png"}</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232F6FEB'/%3E%3Ctext x='16' y='22.5' font-family='Arial Black,Arial' font-weight='900' font-size='15' fill='white' text-anchor='middle'%3EAA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one long scroll of "chapters", each centred at ~1080px; a sticky chip nav; diagrams in their own scroll boxes. Visual world: travel documents — passports, passes, stamps. */
+:root{
+  --bg:#EDF1F6; --surface:#FFFFFF; --surface-2:#F5F7FB; --ink:#14213D; --muted:#5A6782; --line:#D6DDE8;
+  --accent:#2F6FEB;
+  --c-person:#C9861E; --c-agent:#2F6FEB; --c-ap:#7B5CD6; --c-res:#178A5C; --c-ps:#D23F74; --c-as:#0B8C99; --c-thief:#D93636;
+  --s-person:#FBF0DC; --s-agent:#E3ECFE; --s-ap:#EEE8FB; --s-res:#DFF3EA; --s-ps:#FBE4EC; --s-as:#DDF2F4; --s-thief:#FBE3E3;
+  --good:#178A5C; --bad:#D93636;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Onest","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0C1322; --surface:#141E32; --surface-2:#1A263D; --ink:#E7EDF6; --muted:#97A4BC; --line:#28354F;
+  --accent:#6C9BFF;
+  --c-person:#F0B355; --c-agent:#6C9BFF; --c-ap:#A88CF5; --c-res:#3CC48D; --c-ps:#F2709F; --c-as:#35C3D0; --c-thief:#FF6B6B;
+  --s-person:#3A2E17; --s-agent:#1B2C50; --s-ap:#2A2247; --s-res:#15372A; --s-ps:#3D1A29; --s-as:#123A3E; --s-thief:#401C1C;
+  --good:#3CC48D; --bad:#FF6B6B; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0C1322; --surface:#141E32; --surface-2:#1A263D; --ink:#E7EDF6; --muted:#97A4BC; --line:#28354F;
+  --accent:#6C9BFF;
+  --c-person:#F0B355; --c-agent:#6C9BFF; --c-ap:#A88CF5; --c-res:#3CC48D; --c-ps:#F2709F; --c-as:#35C3D0; --c-thief:#FF6B6B;
+  --s-person:#3A2E17; --s-agent:#1B2C50; --s-ap:#2A2247; --s-res:#15372A; --s-ps:#3D1A29; --s-as:#123A3E; --s-thief:#401C1C;
+  --good:#3CC48D; --bad:#FF6B6B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(24px,3.4vw,34px);font-weight:700;letter-spacing:-.01em}
+h3{font-size:17px;font-weight:500}
+p{margin:0}
+code,.mono{font-family:var(--f-mono);font-size:.86em}
+a{color:var(--accent)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:clamp(17px,2vw,19px);color:var(--muted);max-width:62ch}
+section.ch{padding-block:56px 8px;scroll-margin-top:52px}
+.ch-head{display:grid;gap:10px;margin-bottom:26px}
+.ch-head .num{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.1em}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:8px;align-items:center;padding-block:8px}
+nav.top .links{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;padding-block:2px}
+nav.top .links::-webkit-scrollbar{display:none}
+nav.top a.lang{flex:none;font-weight:700;color:var(--accent);border-color:var(--accent);letter-spacing:.04em}
+nav.top a.lang:hover{background:var(--accent);color:#fff}
+.langhint{background:var(--s-agent);border-bottom:1px solid var(--line);font-size:14px}
+.langhint .wrap{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding-block:8px}
+.langhint a{font-weight:700}
+.langhint button{margin-left:auto;border:0;background:transparent;font-size:20px;line-height:1;color:var(--muted);padding:2px 6px}
+nav.top a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid transparent}
+nav.top a:hover{color:var(--ink);border-color:var(--line)}
+nav.top a.on{color:var(--ink);background:var(--surface);border-color:var(--line)}
+nav.top a.brand{font-family:var(--f-display);color:var(--ink);font-weight:700}
+
+/* hero */
+.hero{padding-block:48px 24px}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(52px,9vw,104px);font-weight:700;letter-spacing:-.03em}
+.hero h1 span{color:var(--accent)}
+.hero .tag{font-family:var(--f-display);font-weight:500;font-size:clamp(19px,2.4vw,26px);margin-top:10px;max-width:22ch}
+.hero .lead{margin-top:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:14px;font-weight:500}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--good);display:block}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.cta a{text-decoration:none}
+.passport{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 20px 50px -30px rgba(20,33,61,.45);position:relative;overflow:hidden}
+.passport .ph{display:flex;justify-content:space-between;align-items:center}
+.passport .ph b{font-family:var(--f-display);font-size:14px;letter-spacing:.06em}
+.passport .row{display:grid;grid-template-columns:62px 1fr;gap:16px;margin-top:16px;align-items:center}
+.passport .photo{width:62px;height:72px;border-radius:10px;background:var(--s-agent);color:var(--c-agent);display:grid;place-items:center}
+.passport dl{margin:0;display:grid;gap:4px;font-size:13px;min-width:0}
+.passport dt{color:var(--muted);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.passport dd{margin:0 0 4px;font-family:var(--f-mono);font-size:13px;overflow-wrap:anywhere}
+.mrz{margin-top:14px;padding-right:130px;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);letter-spacing:.06em;border-top:1px dashed var(--line);padding-top:10px;overflow-wrap:anywhere}
+.stamp{position:absolute;right:16px;bottom:14px;transform:rotate(-12deg);border:2.5px solid var(--good);color:var(--good);border-radius:10px;padding:4px 10px;font-family:var(--f-display);font-size:12px;font-weight:700;letter-spacing:.08em;opacity:.9;animation:stamp 1s .4s both}
+@keyframes stamp{0%{transform:rotate(-12deg) scale(2.2);opacity:0}60%{transform:rotate(-12deg) scale(.94);opacity:1}100%{transform:rotate(-12deg) scale(1);opacity:.9}}
+
+.tldr{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:34px}
+.tldr div{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:8px;align-content:start}
+.tldr b{font-family:var(--f-display);font-weight:500;font-size:15px}
+.tldr p{color:var(--muted);font-size:15px}
+.tldr .k{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
+
+/* generic panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:8px 14px;border-radius:999px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:999px;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.good{background:var(--good);border-color:var(--good);color:#fff}
+.btn.bad{background:transparent;border-color:var(--bad);color:var(--bad)}
+.btn:disabled{opacity:.4;cursor:default}
+.scrollx{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* steal demo */
+.steal{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start}
+#steal-svg{width:100%;height:auto;display:block;max-width:560px;margin:0 auto}
+.verdict{border-radius:var(--r);padding:16px;display:grid;gap:8px;border:1px solid var(--line);background:var(--surface-2)}
+.verdict.bad{border-color:var(--bad);background:var(--s-thief)}
+.verdict.good{border-color:var(--good);background:var(--s-res)}
+.verdict b{font-family:var(--f-display);font-weight:500}
+.verdict ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px;display:grid;gap:4px}
+
+/* roles */
+.roles{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start}
+#roles-svg{width:100%;height:auto;display:block}
+.node{cursor:pointer}
+.node circle{transition:stroke-width .2s}
+.node.dim,.edge.dim{opacity:.32}
+.edge,.node{transition:opacity .25s}
+.role-card{display:grid;gap:12px}
+.role-card .who{display:flex;gap:12px;align-items:center}
+.role-card .ico{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;flex:none}
+.role-card h3{font-size:20px}
+.role-card .sub{color:var(--muted);font-size:14px}
+.role-card .an{background:var(--surface-2);border-radius:10px;padding:10px 12px;font-size:15px}
+.role-pick{display:flex;flex-wrap:wrap;gap:6px}
+.role-pick button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.role-pick button i{width:9px;height:9px;border-radius:50%;display:block}
+.role-pick button[aria-pressed="true"]{border-color:var(--ink)}
+.note{border-left:3px solid var(--accent);padding:4px 0 4px 14px;color:var(--muted);font-size:15px}
+
+/* tokens */
+.tokens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tok{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 18px 18px;display:grid;gap:10px;align-content:start;position:relative;overflow:hidden;min-width:0}
+.tok::before{content:"";position:absolute;inset:0 0 auto 0;height:6px;background:var(--tc)}
+.tok h3{font-size:18px}
+.tok .meta{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.tok .life{font-family:var(--f-mono);font-size:12px;font-weight:600;white-space:nowrap;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.tok .tech{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.tok .says{font-size:15px;background:var(--surface-2);border-radius:10px;padding:10px 12px;font-style:italic;overflow-wrap:anywhere}
+.tok.wide{grid-column:1/-1;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px 24px;align-items:start}
+.tok.wide .side{display:grid;gap:10px;align-content:start;min-width:0}
+.tok .from{font-size:14px;color:var(--muted)}
+.tok .from b{color:var(--tc);font-weight:600}
+.tok details summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--accent);list-style:none}
+.tok details summary::-webkit-details-marker{display:none}
+.tok pre{margin:8px 0 0;font-family:var(--f-mono);font-size:11.5px;line-height:1.5;background:var(--surface-2);border-radius:10px;padding:10px;overflow-x:auto;white-space:pre}
+.bound{margin-top:14px;display:flex;gap:14px;align-items:center;background:var(--surface);border:1px dashed var(--accent);border-radius:16px;padding:14px 18px;font-size:15px}
+.bound svg{flex:none;color:var(--accent)}
+
+/* modes player */
+.modes-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.mtab{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:12px;text-align:left;display:grid;gap:6px;align-content:start}
+.mtab .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.mtab b{font-size:14.5px;line-height:1.25}
+.mtab .k{font-size:12.5px;color:var(--muted);line-height:1.3}
+.mtab .dots{display:flex;gap:3px}
+.mtab .dots i{width:8px;height:8px;border-radius:50%;display:block}
+.mtab[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset;background:var(--surface)}
+.player{margin-top:14px;display:grid;gap:14px}
+.player-top{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:flex-start}
+.player-top .when{max-width:60ch;color:var(--muted);font-size:15px}
+.knows{display:flex;gap:8px;align-items:center;font-size:14px;background:var(--surface-2);border-radius:999px;padding:6px 12px;border:1px solid var(--line)}
+.knows b{font-weight:700}
+.seqbox{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px}
+.seq{width:100%;height:auto;display:block}
+.seq text{font-family:var(--f-body)}
+.seq .lbl{font-size:13px;font-weight:600}
+.seq .hdr{font-size:13px;font-weight:700}
+.seq .hsub{font-size:10.5px}
+.dock{position:sticky;bottom:0;z-index:5;display:grid;gap:10px;padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(to bottom,transparent,var(--bg) 14px)}
+.caption{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 10px 30px -18px rgba(20,33,61,.5)}
+.swipe{display:none;font-size:13px;color:var(--muted)}
+.caption .stepno{font-family:var(--f-display);font-size:28px;font-weight:700;color:var(--accent);line-height:1;min-width:2.2ch;font-variant-numeric:tabular-nums}
+.caption .stepno small{display:block;font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:400;margin-top:6px}
+.caption p.big{font-size:17px}
+.caption .det{margin-top:8px;font-family:var(--f-mono);font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.progress{flex:1;min-width:120px;height:6px;background:var(--surface-2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+
+/* ladder */
+.ladder-head{margin-top:28px;display:grid;gap:4px}
+.ladder-head p{color:var(--muted);font-size:15px}
+.ladder{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.ladder div{cursor:pointer}
+.ladder div{border-radius:12px;padding:12px;background:var(--surface);border:1px solid var(--line);display:grid;gap:4px;align-content:end;font-size:13.5px}
+.ladder div b{font-size:14px}
+.ladder div span{color:var(--muted)}
+.ladder .bar{height:var(--h);background:linear-gradient(var(--accent),color-mix(in srgb,var(--accent) 40%,transparent));border-radius:8px;opacity:.85}
+
+/* loop */
+.loop{display:grid;grid-template-columns:340px 1fr;gap:20px;align-items:start}
+.loop svg{width:100%;max-width:340px;height:auto;display:block;margin:0 auto}
+.reqs{display:grid;gap:10px}
+.req{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:14px;text-align:left;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:start}
+.req code{grid-row:span 2;padding:4px 8px;border-radius:8px;background:var(--surface-2);font-weight:600;white-space:nowrap}
+.req b{font-size:15px}
+.req span{color:var(--muted);font-size:14px}
+.req .st{font-family:var(--f-mono);font-size:12px;color:var(--accent)}
+
+/* mission */
+.mission{display:grid;grid-template-columns:1.15fr 1fr;gap:20px;align-items:start}
+.stage{display:grid;gap:12px}
+.bubble{border-radius:16px;padding:14px 16px;border:1px solid var(--line);background:var(--surface);display:grid;gap:8px;animation:pop .35s both}
+.bubble .from{font-size:12px;font-family:var(--f-mono);letter-spacing:.06em;text-transform:uppercase;display:flex;gap:8px;align-items:center}
+.bubble .from i{width:8px;height:8px;border-radius:50%;display:block}
+.bubble.agent{border-color:color-mix(in srgb,var(--c-agent) 50%,var(--line))}
+.bubble.ps{border-color:color-mix(in srgb,var(--c-ps) 50%,var(--line))}
+.bubble.you{border-color:color-mix(in srgb,var(--c-person) 60%,var(--line));background:var(--s-person)}
+.bubble .claim{font-size:12px;color:var(--muted)}
+.bubble ul{margin:0;padding-left:18px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.log{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px;display:grid;gap:12px}
+.log-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pill{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;letter-spacing:.03em}
+.pill.idle{background:var(--surface-2);color:var(--muted)}
+.pill.on{background:var(--s-res);color:var(--good)}
+.pill.off{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.seal{font-family:var(--f-mono);font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.seal b{color:var(--c-ps)}
+.log ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;max-height:360px;overflow-y:auto}
+.log li{display:grid;grid-template-columns:auto 1fr;gap:10px;font-size:14px;animation:pop .35s both}
+.log li .t{font-family:var(--f-mono);font-size:11px;padding:2px 7px;border-radius:6px;height:max-content;white-space:nowrap}
+.log .empty{color:var(--muted);font-size:14px}
+
+/* misc cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:8px;align-content:start}
+.card p{color:var(--muted);font-size:15px}
+.card .ex{font-family:var(--f-mono);font-size:12px;color:var(--ink);background:var(--surface-2);border-radius:8px;padding:6px 8px;overflow-wrap:anywhere}
+
+/* compare */
+table.cmp{width:100%;border-collapse:separate;border-spacing:0;min-width:640px;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:15px}
+table.cmp th,table.cmp td{padding:12px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+table.cmp tr:last-child td{border-bottom:0}
+table.cmp thead th{font-family:var(--f-display);font-weight:500;font-size:14px;background:var(--surface-2)}
+table.cmp td:first-child{font-weight:600;width:22%}
+table.cmp td:nth-child(2){color:var(--muted)}
+table.cmp td:nth-child(3){color:var(--ink)}
+table.cmp .x{color:var(--bad);font-weight:700;margin-right:6px}
+table.cmp .v{color:var(--good);font-weight:700;margin-right:6px}
+
+.faq{display:grid;gap:10px}
+.faq details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 18px}
+.faq summary{cursor:pointer;list-style:none;padding:16px 0;font-weight:600;font-size:16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--f-display);font-size:20px;color:var(--accent);flex:none;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{color:var(--muted);padding-bottom:16px;max-width:75ch}
+.status{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.status div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:4px}
+.status b{font-family:var(--f-display);font-weight:500;font-size:18px}
+.status span{color:var(--muted);font-size:14px}
+footer{padding-block:40px 60px;color:var(--muted);font-size:14px}
+footer ul{padding-left:18px;display:grid;gap:4px}
+
+@media (max-width:860px){
+  .hero-grid,.steal,.roles,.loop,.mission{grid-template-columns:1fr}
+  .tldr{grid-template-columns:1fr}
+  .modes-tabs{grid-template-columns:repeat(5,minmax(148px,1fr));overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory}
+  .mtab{scroll-snap-align:start}
+  .swipe{display:block}
+  .ladder{grid-template-columns:repeat(5,minmax(118px,1fr));overflow-x:auto;padding-bottom:6px}
+  .tokens{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .tokens{grid-template-columns:1fr}
+  .tok.wide{grid-template-columns:1fr}
+  .caption{grid-template-columns:1fr;gap:6px;padding:12px 14px}
+  .caption .stepno{font-size:20px;display:flex;gap:8px;align-items:baseline}
+  .caption .stepno small{margin-top:0}
+  .caption p.big{font-size:15px}
+  .caption .det{font-size:11.5px;margin-top:4px}
+  .controls .btn{padding:8px 12px}
+  .progress{display:none}
+  .hide-s{display:none}
+  .seg{display:grid;grid-template-columns:1fr 1fr;border-radius:14px;width:100%}
+  .seg button{border-radius:10px}
+  #st-run{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+    <symbol id="i-agent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7.5" width="16" height="12" rx="3.5"/><path d="M12 7.5V4"/><circle cx="12" cy="3" r="1"/><circle cx="9" cy="13.5" r="1.4" fill="currentColor"/><circle cx="15" cy="13.5" r="1.4" fill="currentColor"/><path d="M2 12.5v3M22 12.5v3"/></symbol>
+    <symbol id="i-ap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10.5" r="2.3"/><path d="M5.8 16c.7-1.5 1.9-2.2 3.2-2.2s2.5.7 3.2 2.2M14.5 10h4M14.5 13.5h3"/></symbol>
+    <symbol id="i-res" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="7" rx="1.8"/><rect x="4" y="13" width="16" height="7" rx="1.8"/><circle cx="8" cy="7.5" r=".9" fill="currentColor"/><circle cx="8" cy="16.5" r=".9" fill="currentColor"/><path d="M12 7.5h4.5M12 16.5h4.5"/></symbol>
+    <symbol id="i-ps" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8l7.5 3v5.4c0 5-3.6 8.6-7.5 10.1-3.9-1.5-7.5-5.1-7.5-10.1V5.8z"/><circle cx="12" cy="10" r="2.3"/><path d="M8.3 16.3c.8-1.6 2.1-2.4 3.7-2.4s2.9.8 3.7 2.4"/></symbol>
+    <symbol id="i-as" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.2" r="1.4" fill="currentColor"/><path d="M12 16.5v1.6"/></symbol>
+    <symbol id="i-thief" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><rect x="7" y="6.4" width="10" height="2.8" rx="1.4" fill="currentColor"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4.5"/><path d="M11.2 11.8L20 3M16.5 6.5l2.5 2.5M14 9l2 2"/></symbol>
+  </defs>
+</svg>
+
+<nav class="top" aria-label="Разделы">
+  <div class="wrap">
+    <div class="links">
+    <a class="brand" href="#top">AAuth</a>
+    <a href="#problem">Зачем</a>
+    <a href="#roles">Кто участвует</a>
+    <a href="#tokens">Документы</a>
+    <a href="#modes">5 режимов</a>
+    <a href="#loop">Главный цикл</a>
+    <a href="#mission">Миссии</a>
+    <a href="#more">Ещё фишки</a>
+    <a href="#compare">vs OAuth</a>
+    <a href="#faq">Вопросы</a>
+    <a href="#status">Статус</a>
+    </div>
+    <a class="lang" href="https://nibrmi.github.io/aauth/en/" hreflang="en" lang="en" title="English version">EN</a>
+  </div>
+</nav>
+<div class="langhint" id="langhint" hidden><div class="wrap"><span lang="en">This page is also available in English.</span><a href="https://nibrmi.github.io/aauth/en/" hreflang="en" lang="en">Open the English version →</a><button id="lh-x" aria-label="Close">×</button></div></div>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Черновик IETF · draft-hardt-oauth-aauth-protocol-11</div>
+        <h1>A<span>A</span>uth</h1>
+        <p class="tag">Паспорт, подпись и доверенное лицо для <span style="white-space:nowrap">ИИ-агентов</span></p>
+        <p class="lead">Новый протокол от Дика Хардта, редактора OAuth 2.0. Он отвечает на три вопроса: кто этот агент, за кого он работает и что ему разрешено. Без API-ключей, без регистрации на каждом сайте и без токенов, которые сработают в чужих руках.</p>
+        <div class="chips">
+          <span class="chip"><i></i>Без предварительной регистрации</span>
+          <span class="chip"><i></i>Без общих секретов</span>
+          <span class="chip"><i></i>Каждый запрос подписан</span>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="#modes">Посмотреть, как работает</a>
+          <a class="btn" href="#problem">Попробовать украсть токен</a>
+        </div>
+      </div>
+      <div class="passport" aria-label="Пример паспорта агента">
+        <div class="ph"><b>ПАСПОРТ АГЕНТА</b><span class="mono" style="color:var(--muted)">aa-agent+jwt</span></div>
+        <div class="row">
+          <div class="photo"><svg width="40" height="40"><use href="#i-agent"/></svg></div>
+          <dl>
+            <dt>Кто</dt><dd>aauth:assistant@agent.example</dd>
+            <dt>Выдал</dt><dd>https://agent.example</dd>
+            <dt>Представитель (PS)</dt><dd>https://ps.example</dd>
+          </dl>
+        </div>
+        <div class="mrz">KEY Ed25519 · x=NzbLsXh8uDCcd… · ДЕЙСТВУЕТ ≤ 24 Ч</div>
+        <div class="stamp">ПОДПИСЬ ВЕРНА</div>
+      </div>
+    </div>
+
+    <div class="tldr">
+      <div><span class="k">идея 1</span><b>У агента свой паспорт и своя подпись</b><p>Каждая копия агента получает ID и секретный ключ. Каждый запрос подписан. Украденный токен без ключа ничего не стоит.</p></div>
+      <div><span class="k">идея 2</span><b>У человека есть доверенное лицо</b><p>Person Server говорит сервисам, за кого работает агент, спрашивает твоё согласие и ведёт журнал всего, что агент делал.</p></div>
+      <div><span class="k">идея 3</span><b>Сервис сам решает, сколько ему знать</b><p>Пять режимов: от «мне достаточно знать, какой это агент» до «пусть мой сервер доступа проверит все правила».</p></div>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- 1. PROBLEM -->
+<section class="ch" id="problem">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">01 · ЗАЧЕМ</span>
+      <h2>Попробуй украсть токен</h2>
+      <p class="lead">Сегодня агенты ходят в сервисы с API-ключами и OAuth-токенами «на предъявителя». Кто держит токен, тот и пользуется. Переключи режим и нажми кнопку.</p>
+    </div>
+    <div class="panel">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div class="seg" role="group" aria-label="Режим">
+          <button id="st-old" aria-pressed="true">Сейчас: API-ключ, OAuth</button>
+          <button id="st-new" aria-pressed="false">AAuth</button>
+        </div>
+        <button class="btn primary" id="st-run">Воришка перехватывает токен</button>
+      </div>
+      <div class="steal">
+        <div><svg id="steal-svg" viewBox="0 0 560 300" role="img" aria-label="Схема перехвата токена"></svg></div>
+        <div class="verdict" id="st-verdict"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. ROLES -->
+<section class="ch" id="roles">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">02 · КТО УЧАСТВУЕТ</span>
+      <h2>Шесть действующих лиц</h2>
+      <p class="lead">Нажми на любого участника, чтобы увидеть, чем он занят и с кем общается. В каждом конкретном случае участвуют не все.</p>
+    </div>
+    <div class="roles">
+      <div class="panel"><svg id="roles-svg" viewBox="0 0 760 450" role="img" aria-label="Схема участников"></svg></div>
+      <div class="panel role-card" id="role-card"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. TOKENS -->
+<section class="ch" id="tokens">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">03 · ДОКУМЕНТЫ</span>
+      <h2>Четыре документа и один пропуск-на-сессию</h2>
+      <p class="lead">Все токены AAuth живут недолго и подписаны тем, кто их выдал. Цвет полоски показывает, кто выдаёт документ.</p>
+    </div>
+    <div class="tokens" id="tok-list"></div>
+    <div class="bound">
+      <svg width="34" height="34"><use href="#i-key"/></svg>
+      <span><b>Главное правило:</b> каждый документ привязан к ключу агента (поля <code>cnf</code> или <code>agent_jkt</code>). Если запрос не подписан этим ключом, документ недействителен. Поэтому красть его бесполезно.</span>
+    </div>
+  </div>
+</section>
+
+<!-- 4. MODES -->
+<section class="ch" id="modes">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">04 · ПЯТЬ РЕЖИМОВ</span>
+      <h2>Посмотри, как это работает, шаг за шагом</h2>
+      <p class="lead">Выбери режим и жми «Дальше» (или стрелки на клавиатуре). Режимы отличаются тем, что сервис в итоге знает. Один сервис может использовать разные режимы для разных адресов.</p>
+    </div>
+    <p class="swipe">Режимы листаются вбок →</p>
+    <div class="modes-tabs" id="mode-tabs" role="tablist"></div>
+    <div class="player">
+      <div class="player-top">
+        <p class="when" id="mode-when"></p>
+        <div class="knows" id="mode-knows"></div>
+      </div>
+      <div class="seqbox" id="seqbox"><svg class="seq" id="seq" role="img" aria-label="Диаграмма обмена сообщениями"></svg></div>
+      <div class="dock">
+        <div class="caption" aria-live="polite">
+          <div class="stepno" id="cap-no">1<small>из 4</small></div>
+          <div><p class="big" id="cap-text"></p><p class="det" id="cap-det"></p></div>
+        </div>
+        <div class="controls">
+          <button class="btn" id="pl-reset" title="Сначала" aria-label="Сначала">↺</button>
+          <button class="btn" id="pl-prev" aria-label="Назад">← <span class="hide-s">Назад</span></button>
+          <button class="btn primary" id="pl-next">Дальше →</button>
+          <button class="btn" id="pl-auto">▶ <span class="hide-s">Автоплей</span></button>
+          <div class="progress"><i id="pl-bar"></i></div>
+        </div>
+      </div>
+    </div>
+    <div class="ladder-head"><h3>Сколько сервис узнаёт в каждом режиме</h3><p>Чем выше столбик, тем больше сервис знает перед тем, как ответить. Нажми на столбик, чтобы открыть режим.</p></div>
+    <div class="ladder" id="ladder"></div>
+  </div>
+</section>
+
+<!-- 5. LOOP -->
+<section class="ch" id="loop">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">05 · ГЛАВНЫЙ ЦИКЛ</span>
+      <h2>Агенту не нужно знать сервис заранее</h2>
+      <p class="lead">Агент всегда делает одно и то же: отправляет запрос, читает заголовок <code>AAuth-Requirement</code> («что мне от тебя нужно»), выполняет требование и повторяет. Первый запрос к сервису и есть регистрация.</p>
+    </div>
+    <div class="loop">
+      <div class="panel"><svg id="loop-svg" viewBox="0 0 340 340" role="img" aria-label="Цикл запроса"></svg></div>
+      <div class="reqs" id="reqs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. MISSION -->
+<section class="ch" id="mission">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">06 · МИССИИ</span>
+      <h2>Ты даёшь агенту задание, Person Server за ним присматривает</h2>
+      <p class="lead">Миссия описывает задачу обычным текстом. Агент её предлагает, ты одобряешь. Дальше Person Server сверяет с миссией каждое действие агента и записывает всё в журнал. Миссии необязательны. Сыграй за человека.</p>
+    </div>
+    <div class="mission">
+      <div class="stage" id="ms-stage"></div>
+      <div class="log">
+        <div class="log-head"><h3>Журнал миссии</h3><span class="pill idle" id="ms-pill">Нет миссии</span></div>
+        <div class="seal" id="ms-seal">Текст миссии запечатывается хешем SHA-256. Изменить его задним числом нельзя.</div>
+        <ol id="ms-log"><li class="empty">Пока пусто</li></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. MORE -->
+<section class="ch" id="more">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">07 · ЕЩЁ ФИШКИ</span>
+      <h2>Что ещё продумано</h2>
+    </div>
+    <div class="cards">
+      <div class="card"><h3>Субагенты</h3><p>Главный агент может запускать помощников. У каждого свой паспорт с пометкой <code>parent_agent</code>. Сами к Person Server они не ходят: пропуска для них берёт родитель. Глубина только один уровень.</p><span class="ex">aauth:planner.7f3c+search1@vendor.example</span></div>
+      <div class="card"><h3>Цепочки вызовов</h3><p>Сервис, которому для ответа нужен другой сервис, сам становится агентом со своим паспортом. Права человека передаются по цепочке, и Person Server видит каждое звено.</p></div>
+      <div class="card"><h3>Нет «вечных» токенов</h3><p>Паспорт агента живёт до 24 часов, токен личности до часа, заявка до 5 минут. Refresh-токенов нет: когда пропуск истёк, агент снова спрашивает сервис, и у сервиса есть право сказать «нет».</p></div>
+      <div class="card"><h3>Отзыв каскадом</h3><p>Отозвал токен личности, и Person Server сообщает об этом сервису и серверу доступа. Тот, в свою очередь, гасит все пропуска, выданные по этому токену.</p></div>
+      <div class="card"><h3>Приватность</h3><p>Для каждого сайта у тебя свой псевдоним (<code>sub</code>). Сайты не могут сопоставить тебя между собой. В режимах 3–5 сервис даже не видит, какой именно агент пришёл, поэтому не может пускать «только агентов от компании X».</p></div>
+      <div class="card"><h3>Честное окно согласия</h3><p>Person Server обязан визуально отделять слова агента («мне нужно, потому что…») от того, что заявил сам сервис. Агенту выгодно, чтобы ему поверили, и ты должен видеть, где чьи слова.</p></div>
+      <div class="card"><h3>Внедрять можно по частям</h3><p>Каждая сторона подключается сама по себе. Сервис может начать с проверки подписи вместо API-ключа. Тот, кто AAuth не знает, просто игнорирует новые заголовки, и всё старое продолжает работать.</p></div>
+      <div class="card"><h3>Целое семейство черновиков</h3><p>Рядом с основным протоколом развиваются отдельные документы: Budgets (лимиты трат агента), Events (уведомления агентам), R3 (права в терминах MCP, OpenAPI, gRPC, GraphQL) и Bootstrap (как агент получает паспорт).</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. COMPARE -->
+<section class="ch" id="compare">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">08 · СРАВНЕНИЕ</span>
+      <h2>Чем это лучше OAuth для агентов</h2>
+      <p class="lead">AAuth не заменяет OAuth целиком. Сервис может спрятать свой существующий OAuth внутрь сессионного токена, а Person Server может логинить людей через OpenID Connect.</p>
+    </div>
+    <div class="scrollx">
+      <table class="cmp">
+        <thead><tr><th></th><th>OAuth 2.0 и API-ключи</th><th>AAuth</th></tr></thead>
+        <tbody>
+          <tr><td>Кто такой клиент</td><td><span class="x">✕</span>client_id выдаёт каждый сервер свой: id в Google ничего не значит в GitHub</td><td><span class="v">✓</span>Один ID <code>aauth:имя@домен</code>, его может проверить кто угодно</td></tr>
+          <tr><td>Регистрация</td><td><span class="x">✕</span>Заранее на каждом сервере (или Dynamic Client Registration, как в MCP)</td><td><span class="v">✓</span>Не нужна: первый запрос и есть регистрация</td></tr>
+          <tr><td>Кража токена</td><td><span class="x">✕</span>Токен на предъявителя: кто украл, тот и вошёл</td><td><span class="v">✓</span>Токен привязан к ключу, каждый запрос подписан</td></tr>
+          <tr><td>Копии агента</td><td><span class="x">✕</span>Один client_id на всё приложение</td><td><span class="v">✓</span>ID у каждой запущенной копии: отозвать можно одну</td></tr>
+          <tr><td>Подлинность сервиса</td><td><span class="x">✕</span>Сервис криптографически не подтверждает, кто он</td><td><span class="v">✓</span>Сервис подписывает заявку (resource token)</td></tr>
+          <tr><td>Контроль за агентом</td><td><span class="x">✕</span>Нет</td><td><span class="v">✓</span>Миссии, разрешения на действия, аудит, вопросы человеку</td></tr>
+          <tr><td>Чей сервер решает</td><td><span class="x">✕</span>Всегда сервер владельца ресурса</td><td><span class="v">✓</span>Твой Person Server и сервер доступа сервиса договариваются между собой</td></tr>
+          <tr><td>Продление</td><td>Refresh-токены</td><td>Нет refresh: каждый раз заново, у сервиса есть право голоса</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 9. FAQ -->
+<section class="ch" id="faq">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">09 · ВОПРОСЫ</span>
+      <h2>Частые вопросы</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Это уже можно использовать?</summary><p>Попробовать можно: есть SDK для TypeScript, .NET, Python и Go, расширение для Keycloak, готовый Person Server и демо-песочницы (AAuth Explorer, AAuth Web Agent). Но это черновик, а не стандарт. Между версиями меняются названия полей и даже число режимов, так что для боевых систем пока рано.</p></details>
+      <details><summary>Это замена OAuth?</summary><p>Нет, скорее надстройка для мира агентов. Обычные приложения с OAuth продолжат работать как раньше. Сервис может спрятать свой OAuth-токен внутрь сессионного токена AAuth, а Person Server может логинить людей через OpenID Connect.</p></details>
+      <details><summary>Что изменится для обычного человека?</summary><p>Появится место, где видно всех твоих агентов: какие подключены, на каких устройствах, какие у них задания и что они уже сделали. Там же можно ответить на вопрос агента, разрешить или запретить действие и отозвать доступ. Это и есть Person Server.</p></details>
+      <details><summary>А если украдут сам секретный ключ агента?</summary><p>Тогда провайдер агента перестаёт выдавать ему паспорт и отзывает текущий через Person Server. Паспорт живёт не больше суток, токен личности не больше часа. Есть слабое место: сервис, который пускает агента только по паспорту (режим 1), сообщения об отзыве не получает. Там доступ закончится, когда истечёт паспорт.</p></details>
+      <details><summary>Как это связано с MCP?</summary><p>MCP сейчас использует OAuth 2.1 и динамическую регистрацию клиентов: на каждом сервере у агента новый client_id, а токены на предъявителя. Автор AAuth приводит MCP как пример, где эти ограничения уже мешают. Для MCP-серверов уже есть реализации AAuth: TypeScript SDK для MCP-серверов и модуль для Envoy и agentgateway, который превращает MCP-сервис в AAuth-ресурс.</p></details>
+      <details><summary>Кто будет моим Person Server?</summary><p>Его выбираешь ты сам, его никто не навязывает. Это может быть сервис твоего провайдера входа, твоя компания (один сервер выполняет роли провайдера агентов, Person Server и Access Server для сотрудников) или даже свой собственный сервер. В спецификации есть раздел о том, как сделать минимальный Person Server.</p></details>
+      <details><summary>Зачем целых пять режимов? Не слишком сложно?</summary><p>Каждый сервис берёт только то, что ему нужно, и не обязан внедрять всё сразу. Обычно большинство адресов работают по личности агента или человека, и только несколько важных действий (оплата, запись, удаление) требуют полноценного разрешения.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 10. STATUS -->
+<section class="ch" id="status">
+  <div class="wrap">
+    <div class="ch-head">
+      <span class="num">10 · СТАТУС</span>
+      <h2>Где протокол сейчас</h2>
+      <p class="lead">Это личный черновик (Internet-Draft), а не принятый стандарт. Детали меняются от версии к версии: только в -11 появился токен личности, и режимов стало пять вместо четырёх.</p>
+    </div>
+    <div class="status">
+      <div><span>Версия</span><b>-11</b><span>12-я ревизия (00–11), раньше назывался draft-hardt-aauth-protocol</span></div>
+      <div><span>Опубликована</span><b>25.09.2026</b><span>истекает 29.03.2027</span></div>
+      <div><span>Автор</span><b>Dick Hardt</b><span>Hellō, редактор OAuth 2.0 (RFC 6749)</span></div>
+      <div><span>Опирается на</span><b>RFC 9421</b><span>HTTP Message Signatures + Signature-Key</span></div>
+      <div><span>Реализации</span><b>SDK и сервера</b><span>TypeScript, .NET, Python, Go, расширение Keycloak, Person Server</span></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>Источники</b></p>
+    <ul>
+      <li><a href="https://datatracker.ietf.org/doc/draft-hardt-oauth-aauth-protocol/">draft-hardt-oauth-aauth-protocol на IETF Datatracker</a></li>
+      <li><a href="https://github.com/dickhardt/AAuth">github.com/dickhardt/AAuth</a>: исходники и сопутствующие черновики</li>
+      <li><a href="https://www.aauth.dev">aauth.dev</a> и <a href="https://explorer.aauth.dev">AAuth Explorer</a></li>
+      <li><a href="https://datatracker.ietf.org/doc/draft-hardt-httpbis-signature-key/">HTTP Signature Keys</a></li>
+    </ul>
+    <p style="margin-top:14px">Неофициальная инфографика. Не связана с IETF и автором протокола. Схемы упрощены, названия полей и сообщений взяты из версии -11.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+function el(tag, attrs, parent){ const e=document.createElementNS(NS,tag); for(const k in attrs){ if(k==="text") e.textContent=attrs[k]; else e.setAttribute(k,attrs[k]); } if(parent) parent.appendChild(e); return e; }
+function anim(dur, fn, done){ if(reduce){ fn(1); done&&done(); return; } const t0=performance.now(); function f(t){ const p=Math.min(1,(t-t0)/dur); const e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; fn(e); if(p<1) requestAnimationFrame(f); else done&&done(); } requestAnimationFrame(f); }
+function icon(parent, id, x, y, size, color){ return el("use",{href:"#i-"+id,x:x-size/2,y:y-size/2,width:size,height:size,style:"color:"+color},parent); }
+function envelope(parent, color){ const g=el("g",{},parent); el("rect",{x:-13,y:-9,width:26,height:18,rx:4,style:"fill:"+color},g); el("path",{d:"M-9 -4 L0 3 L9 -4",fill:"none",stroke:"#fff","stroke-width":1.8,"stroke-linecap":"round","stroke-linejoin":"round"},g); return g; }
+
+const A = {
+  person:{name:"Человек", sub:"ты", c:"var(--c-person)", s:"var(--s-person)", i:"person"},
+  agent:{name:"Агент", sub:"ИИ-программа", c:"var(--c-agent)", s:"var(--s-agent)", i:"agent"},
+  ap:{name:"Провайдер агента", sub:"AP", c:"var(--c-ap)", s:"var(--s-ap)", i:"ap"},
+  res:{name:"Сервис", sub:"Resource / API", c:"var(--c-res)", s:"var(--s-res)", i:"res"},
+  ps:{name:"Person Server", sub:"твой представитель", c:"var(--c-ps)", s:"var(--s-ps)", i:"ps"},
+  as:{name:"Access Server", sub:"охрана сервиса", c:"var(--c-as)", s:"var(--s-as)", i:"as"},
+};
+
+/* ---------- 1. STEAL DEMO ---------- */
+let stMode="old", stBusy=false;
+const stSvg=$("#steal-svg");
+let SW=560, P={};
+function stLayout(){
+  SW = stSvg.parentElement.clientWidth < 460 ? 360 : 560;
+  stSvg.setAttribute("viewBox",`0 0 ${SW} 320`);
+  P={agent:[56,120], res:[SW-56,120], thief:[SW/2,262]};
+}
+function stDraw(){
+  stLayout();
+  stSvg.innerHTML="";
+  const [ax,ay]=P.agent, [rx,ry]=P.res;
+  el("line",{x1:ax+40,y1:ay,x2:rx-40,y2:ay,stroke:"var(--line)","stroke-width":2,"stroke-dasharray":"5 6"},stSvg);
+  [["agent",A.agent],["res",A.res]].forEach(([k,a])=>{ const [x,y]=P[k]; el("circle",{cx:x,cy:y,r:34,style:"fill:"+a.s+";stroke:"+a.c,"stroke-width":2},stSvg); icon(stSvg,a.i,x,y,32,a.c); el("text",{x,y:y+54,"text-anchor":"middle",style:"fill:var(--ink);font:600 14px var(--f-body)",text:a.name},stSvg); });
+  const [tx,ty]=P.thief; el("circle",{cx:tx,cy:ty,r:30,style:"fill:var(--s-thief);stroke:var(--c-thief)","stroke-width":2},stSvg); icon(stSvg,"thief",tx,ty,28,"var(--c-thief)"); el("text",{x:tx+40,y:ty+5,style:"fill:var(--c-thief);font:600 14px var(--f-body)",text:"Воришка"},stSvg);
+  if(stMode==="new"){ icon(stSvg,"key",ax-24,ay-50,20,"var(--c-agent)"); el("text",{x:ax-10,y:ay-45,style:"fill:var(--muted);font:500 12px var(--f-body)",text:"ключ только у агента"},stSvg); }
+  const hdr = stMode==="old" ? (SW<500?"Bearer sk_live_9f2…":"Authorization: Bearer sk_live_9f2…") : (SW<500?"подпись + паспорт":"Signature + Signature-Key: jwt=…");
+  el("text",{x:SW/2,y:ay-14,"text-anchor":"middle",style:"fill:var(--muted);font:500 12px var(--f-mono)",text:hdr},stSvg);
+}
+function stVerdict(state){
+  const v=$("#st-verdict");
+  if(state==="idle"){ v.className="verdict"; v.innerHTML = stMode==="old"
+    ? "<b>Как сейчас</b><ul><li>API-ключ это общий секрет: его копируют туда, где работает агент.</li><li>OAuth-токен «на предъявителя»: сервис не спрашивает, кто его принёс.</li><li>Любой секрет, который копируют, рано или поздно утечёт.</li></ul>"
+    : "<b>В AAuth</b><ul><li>Секретный ключ никогда не покидает агента.</li><li>Каждый запрос подписан этим ключом (RFC 9421).</li><li>Токен в запросе только говорит, какой ключ должен был подписать.</li></ul>"; return; }
+  if(stMode==="old"){ v.className="verdict bad"; v.innerHTML="<b>Воришка вошёл. 200 OK</b><ul><li>Он просто вставил украденный токен в свой запрос.</li><li>Сервис не может отличить его от настоящего агента.</li><li>Доступ сохраняется, пока токен не отзовут вручную.</li></ul>"; }
+  else { v.className="verdict good"; v.innerHTML="<b>Отказ. 401: подпись не сходится</b><ul><li>Токен у воришки есть, а секретного ключа нет.</li><li>Подделать подпись под свой запрос он не может.</li><li>К тому же токены живут от 5 минут до 24 часов.</li></ul>"; }
+}
+function stRun(){
+  if(stBusy) return; stBusy=true; stDraw(); stVerdict("idle");
+  const [ax,ay]=P.agent, [rx,ry]=P.res, [tx,ty]=P.thief, mid=SW/2;
+  $("#st-run").disabled=true;
+  const e=envelope(stSvg,"var(--c-agent)");
+  anim(1000,p=>{ e.setAttribute("transform",`translate(${ax+40+p*(rx-ax-80)},${ay})`); },()=>{
+    e.remove();
+    const c=envelope(stSvg,"var(--c-thief)");
+    el("text",{x:mid-14,y:ay+62,"text-anchor":"end",style:"fill:var(--c-thief);font:600 12px var(--f-body)",text:"копия токена"},stSvg);
+    anim(800,p=>{ c.setAttribute("transform",`translate(${mid},${ay+p*(ty-ay-44)})`); },()=>{
+      setTimeout(()=>{
+        const sx=tx+24, sy=ty-20, ex=rx-22, ey=ry+28;
+        const line=el("line",{x1:sx,y1:sy,x2:sx,y2:sy,stroke:"var(--c-thief)","stroke-width":2.5},stSvg);
+        anim(1000,p=>{ const x=sx+p*(ex-sx), y=sy+p*(ey-sy); line.setAttribute("x2",x); line.setAttribute("y2",y); c.setAttribute("transform",`translate(${x},${y})`); },()=>{
+          c.remove();
+          const ok = stMode==="old", px=Math.min(rx, SW-66);
+          const g=el("g",{transform:`translate(${px},${ry-62})`},stSvg);
+          el("rect",{x:-62,y:-17,width:124,height:34,rx:17,style:"fill:"+(ok?"var(--bad)":"var(--good)")},g);
+          el("text",{x:0,y:5,"text-anchor":"middle",style:"fill:#fff;font:700 13px var(--f-body)",text: ok?"200 OK, входи":"401 Отказ"},g);
+          stVerdict("done"); stBusy=false; $("#st-run").disabled=false; $("#st-run").textContent="Ещё раз";
+        });
+      },300);
+    });
+  });
+}
+function stSet(m){ stMode=m; $("#st-old").setAttribute("aria-pressed",m==="old"); $("#st-new").setAttribute("aria-pressed",m==="new"); $("#st-run").textContent="Воришка перехватывает токен"; stDraw(); stVerdict("idle"); }
+$("#st-old").onclick=()=>{ if(!stBusy) stSet("old"); };
+$("#st-new").onclick=()=>{ if(!stBusy) stSet("new"); };
+$("#st-run").onclick=stRun;
+stSet("old");
+
+/* ---------- 2. ROLES ---------- */
+/* two hand-placed layouts: wide (760×450) and narrow (360×580); label positions avoid nodes and each other */
+const RL={
+  wide:{vb:"0 0 760 450", r:34,
+    p:{person:[380,60], ps:[200,200], as:[560,200], ap:[80,370], agent:[330,370], res:[600,370]},
+    l:[[362,166],[282,124],[392,200],[255,288],[205,370],[466,370],[592,288]]},
+  narrow:{vb:"0 0 360 580", r:30,
+    p:{person:[180,52], ps:[80,196], as:[280,196], agent:[180,350], ap:[66,496], res:[294,496]},
+    l:[[180,240],[108,154],[180,196],[146,298],[112,436],[254,446],[288,352]]},
+};
+const RE=[
+  {a:"person",b:"agent",l:"поручает задачу",ln:"поручает",dash:true},
+  {a:"person",b:"ps",l:"миссии и согласие"},
+  {a:"ps",b:"as",l:"федерация"},
+  {a:"agent",b:"ps",l:"токены личности и пропуска",ln:"токены и пропуска"},
+  {a:"ap",b:"agent",l:"паспорт"},
+  {a:"agent",b:"res",l:"подписанные запросы"},
+  {a:"as",b:"res",l:"работает на сервис",dash:true},
+];
+const RD={
+  person:{t:"Ты или твоя компания. От твоего имени работает агент, и ты за него отвечаешь. Ты одобряешь миссии и даёшь согласие на доступ.", a:"Хозяин, который дал курьеру поручение."},
+  agent:{t:"ИИ-программа, которая ходит по сервисам. У каждой запущенной копии свой ID вида aauth:assistant@agent.example и свой секретный ключ. Каждый запрос она подписывает.", a:"Курьер с паспортом и личной печатью."},
+  ap:{t:"Платформа, которая выпускает агенту паспорт (agent token) и обновляет его минимум раз в сутки. Перестала выдавать, и агент фактически выключен. Сервисам достаточно доверять ключам провайдера, а не каждому агенту.", a:"Паспортный стол."},
+  res:{t:"API, куда идёт агент: календарь, авиакомпания, база данных. Сам решает, что ему нужно знать перед тем, как ответить: какой агент, какой человек или полноценное разрешение.", a:"Здание, куда пришёл курьер."},
+  ps:{t:"Твой цифровой представитель, и выбираешь его ты. Подтверждает сервисам, за кого работает агент, спрашивает твоё согласие, ведёт миссии и журнал, передаёт тебе вопросы агента.", a:"Личный секретарь с доверенностью."},
+  as:{t:"Проверяет правила конкретного сервиса и выдаёт пропуск. Договаривается с твоим Person Server. Работает на сервис, а не на тебя.", a:"Бюро пропусков в здании."},
+};
+const rSvg=$("#roles-svg"); let rSel="ps";
+function rDraw(){
+  const L = rSvg.parentElement.clientWidth < 520 ? RL.narrow : RL.wide, RP=L.p, R=L.r, nar=L===RL.narrow;
+  rSvg.setAttribute("viewBox",L.vb);
+  rSvg.innerHTML="";
+  const conn = k => RE.filter(e=>e.a===k||e.b===k);
+  const labels=el("g",{},null);
+  RE.forEach((e,i)=>{
+    const {a,b,dash}=e, l=(nar&&e.ln)?e.ln:e.l;
+    const [x1,y1]=RP[a],[x2,y2]=RP[b];
+    const on = a===rSel||b===rSel;
+    el("line",{x1,y1,x2,y2,class:"edge"+(on?"":" dim"),stroke:on?A[rSel].c:"var(--muted)","stroke-width":on?2.5:1.5,"stroke-dasharray":dash?"5 6":"none"},rSvg);
+    const [mx,my]=L.l[i], w=l.length*6.9+18;
+    const g=el("g",{class:"edge"+(on?"":" dim")},labels);
+    el("rect",{x:mx-w/2,y:my-11,width:w,height:22,rx:11,style:"fill:var(--surface);stroke:"+(on?A[rSel].c:"var(--line)")},g);
+    el("text",{x:mx,y:my+4.5,"text-anchor":"middle",style:"fill:var(--ink);font:500 12px var(--f-body)",text:l},g);
+  });
+  rSvg.appendChild(labels);
+  const near=new Set([rSel]); conn(rSel).forEach(e=>{near.add(e.a);near.add(e.b);});
+  Object.keys(RP).forEach(k=>{
+    const [x,y]=RP[k], a=A[k];
+    const g=el("g",{class:"node"+(near.has(k)?"":" dim"),tabindex:0,role:"button","aria-label":a.name},rSvg);
+    el("circle",{cx:x,cy:y,r:R,style:"fill:"+a.s+";stroke:"+a.c,"stroke-width":k===rSel?4:2},g);
+    icon(g,a.i,x,y,R*.95,a.c);
+    el("text",{x,y:y+R+18,"text-anchor":"middle",style:"fill:var(--ink);font:700 14px var(--f-body)",text:a.name},g);
+    el("text",{x,y:y+R+33,"text-anchor":"middle",style:"fill:var(--muted);font:400 12px var(--f-body)",text:a.sub},g);
+    g.addEventListener("click",()=>rPick(k));
+    g.addEventListener("keydown",ev=>{ if(ev.key==="Enter"||ev.key===" "){ev.preventDefault(); rPick(k);} });
+  });
+}
+function rCard(){
+  const a=A[rSel], d=RD[rSel];
+  $("#role-card").innerHTML=`<div class="who"><div class="ico" style="background:${a.s};color:${a.c}"><svg width="30" height="30"><use href="#i-${a.i}"/></svg></div><div><h3>${a.name}</h3><div class="sub">${a.sub}</div></div></div>
+  <p>${d.t}</p><div class="an"><b>На пальцах:</b> ${d.a}</div>
+  <p class="note">Person Server работает на тебя, Access Server на сервис. В OAuth эти интересы смешаны в одном сервере авторизации, и для агентов, которые ходят между разными компаниями, это проблема.</p>
+  <div class="role-pick">${Object.keys(A).map(k=>`<button data-k="${k}" aria-pressed="${k===rSel}"><i style="background:${A[k].c}"></i>${A[k].name}</button>`).join("")}</div>`;
+  $("#role-card").querySelectorAll(".role-pick button").forEach(b=>b.onclick=()=>rPick(b.dataset.k));
+}
+function rPick(k){ rSel=k; rDraw(); rCard(); }
+rPick("ps");
+
+/* ---------- 3. TOKENS ---------- */
+const TOK=[
+  {n:"Паспорт агента", tech:"agent token · aa-agent+jwt", c:"var(--c-ap)", from:"Провайдер агента", life:"≤ 24 ч", says:"«Это агент aauth:assistant@agent.example, вот его открытый ключ. Его представитель: ps.example»",
+   json:`{\n  "iss": "https://agent.example",\n  "sub": "aauth:assistant@agent.example",\n  "cnf": { "jwk": { "kty":"OKP", "crv":"Ed25519", "x":"…" } },\n  "ps":  "https://ps.example",\n  "exp": 1730304000\n}`},
+  {n:"Токен личности", tech:"person token · aa-person+jwt", c:"var(--c-ps)", from:"Person Server", life:"≤ 1 ч", says:"«Этот агент действует за человека 8f14e45f… на сайте resource.example». Прав не даёт, только сообщает, кто ты.",
+   json:`{\n  "iss": "https://ps.example",\n  "aud": "https://resource.example",\n  "sub": "8f14e45fceea167a5a36dedd4bea2543",\n  "cnf": { "jwk": { … ключ агента … } },\n  "mission_s256": "dBjftJeZ4CVP…",\n  "exp": 1730221200\n}`},
+  {n:"Заявка", tech:"resource token · aa-resource+jwt", c:"var(--c-res)", from:"Сервис", life:"≤ 5 мин", says:"«Я, сервис X, прошу для человека Y и агента с ключом Z права calendar.write». Агент несёт её своему Person Server.",
+   json:`{\n  "iss": "https://resource.example",\n  "aud": "https://ps.example",\n  "ps":  "https://ps.example",\n  "sub": "8f14e45f…",\n  "agent_jkt": "NzbLsXh8…",\n  "presented_jti": "pt-3ab910",\n  "scope": "calendar.write"\n}`},
+  {n:"Пропуск", tech:"auth token · aa-auth+jwt", c:"var(--c-as)", from:"Person Server или Access Server", life:"не дольше токена-основания", says:"«Разрешено: вот права и данные о человеке». С ним агент выполняет нужное действие.",
+   json:`{\n  "iss": "https://as.resource.example",\n  "aud": "https://resource.example",\n  "ps":  "https://ps.example",\n  "sub": "8f14e45f…",\n  "scope": "calendar.write",\n  "cnf": { "jwk": { … ключ агента … } }\n}`},
+  {n:"Сессионный токен", tech:"session token · AAuth-Access", c:"var(--c-res)", from:"Сервис, для себя", life:"на усмотрение сервиса", says:"Сервис заворачивает в него свой обычный OAuth или сессию. Работает только вместе с подписью агента. Новый приходит в любом ответе, отдельного refresh нет.",
+   json:`HTTP/1.1 200 OK\nAAuth-Access: wrapped-session-token-value\n\nGET /api/data\nAuthorization: AAuth wrapped-session-token-value\nSignature: sig=:…:`},
+];
+$("#tok-list").innerHTML=TOK.map((t,i)=>{
+  const head=`<h3>${t.n}</h3><div class="meta"><span class="life">живёт ${t.life}</span><span class="tech">${t.tech}</span></div><p class="from">Выдаёт: <b>${t.from}</b></p>`;
+  const body=`<p class="says">${t.says}</p><details><summary>Заглянуть внутрь →</summary><pre>${t.json}</pre></details>`;
+  return i===TOK.length-1
+    ? `<article class="tok wide" style="--tc:${t.c}"><div class="side">${head}</div><div class="side">${body}</div></article>`
+    : `<article class="tok" style="--tc:${t.c}">${head}${body}</article>`;
+}).join("");
+
+/* ---------- 4. MODES PLAYER ---------- */
+const MODES=[
+ {key:"agent", n:"Режим 1", t:"Только агент", k:"Замена API-ключа", knows:"какой это агент", h:20,
+  when:"Сервису достаточно знать, какой агент пришёл, например публичное API с лимитами на агента. Ни Person Server, ни Access Server не нужны.",
+  actors:["ap","agent","res"],
+  steps:[
+   {f:"ap",t:"agent",l:"паспорт агента",c:"var(--c-ap)",cap:"Агент создаёт себе пару ключей и доказывает провайдеру, кто он. Провайдер выдаёт паспорт: ID агента, привязанный к его открытому ключу.",d:"agent token · typ aa-agent+jwt · sub=aauth:assistant@agent.example · живёт ≤ 24 ч"},
+   {f:"agent",t:"res",l:"запрос + подпись + паспорт",c:"var(--c-agent)",cap:"Агент подписывает запрос своим секретным ключом и кладёт паспорт в заголовок. Регистрироваться на сервисе заранее не нужно.",d:"Signature-Key: sig=jwt; jwt=\"eyJ…\" · Signature-Input · Signature (RFC 9421)"},
+   {f:"res",t:"res",l:"проверяю подпись и паспорт",c:"var(--c-res)",cap:"Сервис проверяет подпись по ключу из паспорта, а сам паспорт по ключам провайдера, опубликованным на его сайте.",d:"/.well-known/aauth-agent.json → jwks_uri"},
+   {f:"res",t:"agent",l:"200 OK",c:"var(--c-res)",cap:"Сервис знает, какой агент пришёл, и решает сам, пускать ли его. Общих секретов нет, утекать нечему.",d:"Если паспорта не было: 401 + AAuth-Requirement: requirement=agent-token"},
+  ]},
+ {key:"resource", n:"Режим 2", t:"Сервис сам", k:"Замена обычного OAuth", knows:"какой человек (сам выяснил)", h:40,
+  when:"У сервиса уже есть свой вход, экран согласия или OAuth. Он оставляет их как есть и просто привязывает результат к подписи агента.",
+  actors:["person","agent","res"],
+  steps:[
+   {f:"agent",t:"res",l:"запрос + подпись",c:"var(--c-agent)",cap:"Агент приходит с паспортом и подписанным запросом.",d:"Signature-Key: sig=jwt; jwt=<agent token>"},
+   {f:"res",t:"agent",l:"202: нужен человек",c:"var(--c-res)",cap:"Сервис отвечает: «Мне нужен человек, пусть зайдёт на мою страницу с этим кодом». И даёт адрес, по которому агенту ждать результат.",d:"AAuth-Requirement: requirement=interaction; url=\"https://resource.example/interaction\"; code=\"A1B2-C3D4\""},
+   {f:"agent",t:"person",l:"открой ссылку, код A1B2-C3D4",c:"var(--c-agent)",cap:"Агент показывает тебе ссылку и код (напрямую или через Person Server).",d:"{url}?code=A1B2-C3D4&callback=…"},
+   {f:"person",t:"res",l:"вход и согласие",c:"var(--c-person)",cap:"Ты логинишься и соглашаешься прямо на сайте сервиса, как в обычном OAuth.",d:"Код одноразовый"},
+   {f:"agent",t:"res",l:"ну что? (опрос)",c:"var(--c-agent)",cap:"Тем временем агент периодически спрашивает сервис, готово ли.",d:"GET /pending/abc123 (подписанный)"},
+   {f:"res",t:"agent",l:"200 + сессионный токен",c:"var(--c-res)",cap:"Готово. Сервис выдаёт сессионный токен, внутри которого может лежать его обычный OAuth-токен.",d:"AAuth-Access: wrapped-session-token-value"},
+   {f:"agent",t:"res",l:"запрос + подпись + токен",c:"var(--c-agent)",cap:"Дальше агент ходит с этим токеном. Без подписи агента токен бесполезен, украсть и использовать его нельзя.",d:"Authorization: AAuth wrapped-session-token-value · authorization входит в подпись"},
+  ]},
+ {key:"person", n:"Режим 3", t:"Личность человека", k:"«Войти через…» для агентов", knows:"какой человек (сказал PS)", h:55,
+  when:"Сервису нужно знать, за кого работает агент, но собственный вход ему не нужен. Он верит тому, что скажет Person Server. Это как кнопка «Войти через Google», только для агентов.",
+  actors:["person","agent","res","ps"],
+  steps:[
+   {f:"agent",t:"ps",l:"дай токен личности для resource.example",c:"var(--c-agent)",cap:"Агент просит свой Person Server: «Подтверди сервису, за кого я работаю».",d:"POST /person {\"resource\":\"https://resource.example\"}"},
+   {f:"ps",t:"person",l:"пустить агента от твоего имени?",c:"var(--c-ps)",cap:"Если агент идёт на этот сайт впервые, Person Server может спросить тебя. Вопрос звучит не «можно назвать твоё имя?», а «можно ли агенту действовать там от твоего имени?».",d:"202 + requirement=interaction (только если нужно)"},
+   {f:"person",t:"ps",l:"да",c:"var(--c-person)",cap:"Ты соглашаешься.",d:""},
+   {f:"ps",t:"agent",l:"токен личности (для одного сайта)",c:"var(--c-ps)",cap:"Person Server выдаёт токен личности. Для каждого сайта у тебя свой псевдоним, так что сайты не могут сопоставить тебя между собой. Прав этот токен не даёт.",d:"person token · aud=resource.example · sub=8f14e45f… · ≤ 1 ч"},
+   {f:"agent",t:"res",l:"запрос + подпись + токен личности",c:"var(--c-agent)",cap:"Агент подписывает запрос и прикладывает токен личности вместо паспорта.",d:"Signature-Key: sig=jwt; jwt=<person token>"},
+   {f:"res",t:"agent",l:"200 OK",c:"var(--c-res)",cap:"Сервис знает человека и обслуживает его по своим правилам. Какой именно агент пришёл, он не видит: это защищает от дискриминации по поставщику агента.",d:"Person Server в самом запросе не участвует"},
+  ]},
+ {key:"ps", n:"Режим 4", t:"Разрешение от PS", k:"Три стороны", knows:"человек + согласованные права", h:75,
+  when:"Для какого-то действия сервису нужно явное согласие на конкретные права, например запись в календарь. Своего сервера доступа у сервиса нет, он верит Person Server.",
+  actors:["person","agent","res","ps"],
+  steps:[
+   {f:"agent",t:"res",l:"хочу calendar.write (+ токен личности)",c:"var(--c-agent)",cap:"Агент просит у сервиса права на запись в календарь и показывает токен личности.",d:"POST /authorize {\"scope\":\"calendar.write\"}"},
+   {f:"res",t:"agent",l:"заявка (для твоего PS)",c:"var(--c-res)",cap:"Сервис выписывает подписанную заявку: кто просит, за кого, с каким ключом и какие права. Адресат заявки — Person Server агента.",d:"resource token · aud=ps.example · agent_jkt · presented_jti · ≤ 5 мин"},
+   {f:"agent",t:"ps",l:"заявка + «зачем мне это»",c:"var(--c-agent)",cap:"Агент несёт заявку своему Person Server и объясняет зачем: «Найти время для встречи».",d:"POST /token {resource_token, presented_token, justification}"},
+   {f:"ps",t:"person",l:"агент просит запись в календарь. Разрешить?",c:"var(--c-ps)",cap:"Person Server показывает тебе запрос. Слова агента он помечает как слова агента, отдельно от того, что заявил сервис. Можно задать агенту вопрос в чате.",d:"Уточнение: requirement=clarification, до ~5 раундов"},
+   {f:"person",t:"ps",l:"разрешаю",c:"var(--c-person)",cap:"Ты соглашаешься.",d:""},
+   {f:"ps",t:"agent",l:"пропуск",c:"var(--c-ps)",cap:"Person Server выдаёт пропуск с правами и данными о тебе.",d:"auth token · scope=calendar.write"},
+   {f:"agent",t:"res",l:"запрос + подпись + пропуск",c:"var(--c-agent)",cap:"Агент идёт к сервису с пропуском.",d:"Signature-Key: sig=jwt; jwt=<auth token>"},
+   {f:"res",t:"agent",l:"200 OK",c:"var(--c-res)",cap:"Сервис проверяет пропуск и применяет свои правила. Любой Person Server может работать с любым сервисом без предварительных договорённостей.",d:""},
+  ]},
+ {key:"fed", n:"Режим 5", t:"Федерация", k:"Четыре стороны", knows:"человек + решение по политике", h:100,
+  when:"У сервиса есть своя охрана (Access Server) со своими правилами. Твой Person Server договаривается с ней за тебя. Для агента разницы с режимом 4 не видно.",
+  actors:["agent","res","ps","as"],
+  steps:[
+   {f:"agent",t:"res",l:"хочу доступ (+ токен личности)",c:"var(--c-agent)",cap:"Агент просит доступ и показывает токен личности.",d:"POST /authorize"},
+   {f:"res",t:"agent",l:"заявка (для моей охраны)",c:"var(--c-res)",cap:"Сервис выписывает заявку, но адресует её своему Access Server.",d:"resource token · aud=as.resource.example"},
+   {f:"agent",t:"ps",l:"заявка + токен личности",c:"var(--c-agent)",cap:"Агент, как обычно, несёт заявку своему Person Server.",d:"POST /token {resource_token, presented_token}"},
+   {f:"ps",t:"as",l:"федерация: заявка + личность",c:"var(--c-ps)",cap:"Person Server видит адресата заявки и сам обращается к Access Server сервиса. Запрос подписан ключом Person Server.",d:"HTTP Sig с jwks_uri PS · POST auth_token_endpoint"},
+   {f:"as",t:"as",l:"проверяю правила сервиса",c:"var(--c-as)",cap:"Access Server проверяет политику сервиса. Он может попросить у PS дополнительные данные о человеке или задать уточняющий вопрос.",d:"claims required · clarification"},
+   {f:"as",t:"ps",l:"пропуск",c:"var(--c-as)",cap:"Политика пройдена, Access Server выдаёт пропуск.",d:"auth token · iss=as.resource.example"},
+   {f:"ps",t:"agent",l:"пропуск",c:"var(--c-ps)",cap:"Person Server передаёт пропуск агенту.",d:""},
+   {f:"agent",t:"res",l:"запрос + подпись + пропуск",c:"var(--c-agent)",cap:"Агент идёт к сервису с пропуском.",d:"GET /api/documents"},
+   {f:"res",t:"agent",l:"200 OK",c:"var(--c-res)",cap:"Готово. Разные компании, разные домены доверия, и никто ни у кого заранее не регистрировался.",d:""},
+  ]},
+];
+let mi=0, si=0, autoT=null;
+const seq=$("#seq");
+function tabs(){
+  $("#mode-tabs").innerHTML=MODES.map((m,i)=>`<button class="mtab" role="tab" aria-pressed="${i===mi}" data-i="${i}"><span class="n">${m.n}</span><b>${m.t}</b><span class="k">${m.k}</span><span class="dots">${m.actors.map(a=>`<i style="background:${A[a].c}" title="${A[a].name}"></i>`).join("")}</span></button>`).join("");
+  $("#mode-tabs").querySelectorAll(".mtab").forEach(b=>b.onclick=()=>{ mi=+b.dataset.i; si=0; stopAuto(); tabs(); render(true); });
+}
+/* wide: fixed 900-unit canvas scaled to fit; compact (phones): canvas = real pixel width, so text stays readable */
+const SHORT={ap:"Провайдер"};
+function geo(m){
+  const avail=$("#seqbox").clientWidth-16, compact=avail<620;
+  const W=compact?Math.max(300,avail):900, pad=compact?44:95, n=m.actors.length, X={};
+  m.actors.forEach((a,i)=>X[a]=pad+i*(W-2*pad)/(n-1));
+  return {W,X,compact,rowH:compact?50:56,top:compact?108:104,cw:compact?6.5:6.9,fs:compact?12:13};
+}
+function clampX(x,w,W){ return Math.min(Math.max(x,w/2+3),W-w/2-3); }
+function render(animate){
+  const m=MODES[mi], G=geo(m), {W,X,compact,rowH,top,cw,fs}=G, N=m.steps.length, H=top+N*rowH+6;
+  seq.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  seq.innerHTML="";
+  const span=(W-2*(compact?44:95))/(m.actors.length-1);
+  m.actors.forEach(a=>{ const x=X[a], ac=A[a];
+    el("line",{x1:x,y1:72,x2:x,y2:H-4,stroke:"var(--line)","stroke-width":2,"stroke-dasharray":"4 6"},seq);
+    if(compact){
+      const bw=Math.min(span-6,104);
+      el("rect",{x:x-bw/2,y:6,width:bw,height:62,rx:12,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
+      icon(seq,ac.i,x,27,24,ac.c);
+      el("text",{x,y:57,"text-anchor":"middle",style:`fill:var(--ink);font:700 ${span<92?9.5:10.5}px var(--f-body)`,text:SHORT[a]||ac.name},seq);
+    } else {
+      el("rect",{x:x-82,y:8,width:164,height:58,rx:14,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
+      icon(seq,ac.i,x-56,37,26,ac.c);
+      el("text",{x:x-38,y:34,class:"hdr",style:"fill:var(--ink)",text:ac.name},seq);
+      el("text",{x:x-38,y:50,class:"hsub",style:"fill:var(--muted)",text:ac.sub},seq);
+    }
+  });
+  m.steps.forEach((s,i)=>{
+    if(i>si) return;
+    const y=top+i*rowH, cur=i===si;
+    const g=el("g",{opacity:cur?1:.5},seq);
+    if(s.f===s.t){
+      const w=Math.max(compact?120:150,s.l.length*cw+28), x=clampX(X[s.f],w,W);
+      el("rect",{x:x-w/2,y:y-16,width:w,height:32,rx:10,style:`fill:var(--surface);stroke:${s.c}`,"stroke-width":cur?2.5:1.5,"stroke-dasharray":"5 4"},g);
+      el("text",{x,y:y+4.5,"text-anchor":"middle",style:`fill:var(--ink);font:600 ${fs}px var(--f-body)`,text:s.l},g);
+      return;
+    }
+    const x1=X[s.f], x2=X[s.t], dir=Math.sign(x2-x1), sx=x1+dir*8, ex=x2-dir*10;
+    const line=el("line",{x1:sx,y1:y,x2:sx,y2:y,stroke:s.c,"stroke-width":cur?3:2,"stroke-linecap":"round"},g);
+    const head=el("path",{d:`M${ex} ${y-6} L${ex+dir*10} ${y} L${ex} ${y+6} Z`,style:`fill:${s.c}`,opacity:0},g);
+    const tw=s.l.length*cw+18, midx=clampX((x1+x2)/2,tw,W);
+    el("rect",{x:midx-tw/2,y:y-29,width:tw,height:20,rx:10,style:"fill:var(--surface)"},g);
+    el("text",{x:midx,y:y-14.5,"text-anchor":"middle",style:`fill:var(--ink);font:${cur?700:500} ${fs}px var(--f-body)`,text:s.l},g);
+    const done=()=>{ line.setAttribute("x2",ex); head.setAttribute("opacity",1); };
+    if(cur && animate){
+      const env=envelope(seq,s.c);
+      anim(850,p=>{ const x=sx+(ex-sx)*p; line.setAttribute("x2",x); env.setAttribute("transform",`translate(${x},${y})`); },()=>{ done(); env.remove(); });
+    } else done();
+  });
+  const s=m.steps[si];
+  $("#cap-no").innerHTML=`${si+1}<small>из ${N}</small>`;
+  $("#cap-text").textContent=s.cap;
+  $("#cap-det").textContent=s.d;
+  $("#cap-det").hidden=!s.d;
+  $("#mode-when").textContent=m.when;
+  $("#mode-knows").innerHTML=`Сервис узнаёт: <b>${m.knows}</b>`;
+  $("#pl-prev").disabled=si===0;
+  $("#pl-next").disabled=si===N-1;
+  $("#pl-bar").style.width=((si+1)/N*100)+"%";
+  ladder();
+}
+function next(){ const N=MODES[mi].steps.length; if(si<N-1){ si++; render(true); return true;} return false; }
+function prev(){ if(si>0){ si--; render(false);} }
+function stopAuto(){ if(autoT){ clearInterval(autoT); autoT=null; } $("#pl-auto").innerHTML='▶ <span class="hide-s">Автоплей</span>'; }
+$("#pl-next").onclick=()=>{ stopAuto(); next(); };
+$("#pl-prev").onclick=()=>{ stopAuto(); prev(); };
+$("#pl-reset").onclick=()=>{ stopAuto(); si=0; render(true); };
+$("#pl-auto").onclick=()=>{
+  if(autoT){ stopAuto(); return; }
+  if(si===MODES[mi].steps.length-1){ si=0; render(true); }
+  $("#pl-auto").innerHTML='⏸ <span class="hide-s">Пауза</span>';
+  autoT=setInterval(()=>{ if(!next()) stopAuto(); },2800);
+};
+document.addEventListener("keydown",e=>{
+  const r=$("#modes").getBoundingClientRect(); if(r.top>innerHeight*.6||r.bottom<innerHeight*.3) return;
+  if(e.target.closest("input,textarea")) return;
+  if(e.key==="ArrowRight"){ stopAuto(); next(); e.preventDefault(); }
+  if(e.key==="ArrowLeft"){ stopAuto(); prev(); e.preventDefault(); }
+});
+function ladder(){
+  $("#ladder").innerHTML=MODES.map((m,i)=>`<div data-i="${i}" role="button" tabindex="0" style="${i===mi?'border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset':''}"><div class="bar" style="--h:${m.h*0.9}px"></div><b>${m.n} · ${m.t}</b><span>${m.knows}</span></div>`).join("");
+  $("#ladder").querySelectorAll("[data-i]").forEach(d=>{ const go=()=>{ mi=+d.dataset.i; si=0; stopAuto(); tabs(); render(true); $("#mode-tabs").scrollIntoView({block:"start"}); }; d.onclick=go; d.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } }; });
+}
+tabs(); render(false);
+
+/* ---------- 5. LOOP ---------- */
+const REQ=[
+ {code:"agent-token", st:"401", need:"знать, какой это агент", act:"прикладывает свой паспорт", c:"var(--c-ap)"},
+ {code:"interaction", st:"202", need:", чтобы человек зашёл на страницу сервиса", act:"даёт тебе ссылку и код, потом ждёт", c:"var(--c-person)"},
+ {code:"person-token", st:"401", need:"знать, за какого человека работает агент", act:"берёт токен личности у своего Person Server", c:"var(--c-ps)"},
+ {code:"auth-token", st:"401 / 202", need:"согласие или проверку правил для конкретных прав", act:"несёт приложенную заявку своему Person Server и получает пропуск", c:"var(--c-as)"},
+];
+let rq=3;
+function loopDraw(){
+  const s=$("#loop-svg"); s.innerHTML="";
+  const cx=170, cy=170, R=118;
+  const pts=[["Запрос",-90,"var(--c-agent)"],["Ответ:\nчто нужно",0,"var(--c-res)"],["Выполнить",90,REQ[rq].c],["Повтор",180,"var(--c-agent)"]];
+  el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--line)","stroke-width":8},s);
+  const arc=el("circle",{cx,cy,r:R,fill:"none",stroke:"var(--accent)","stroke-width":8,"stroke-dasharray":`70 ${2*Math.PI*R-70}`,"stroke-linecap":"round",transform:`rotate(-90 ${cx} ${cy})`},s);
+  if(!reduce){ el("animateTransform",{attributeName:"transform",type:"rotate",from:`-90 ${cx} ${cy}`,to:`270 ${cx} ${cy}`,dur:"4s",repeatCount:"indefinite"},arc); }
+  pts.forEach(([t,ang,c])=>{ const r=ang*Math.PI/180, x=cx+R*Math.cos(r), y=cy+R*Math.sin(r);
+    el("circle",{cx:x,cy:y,r:38,style:`fill:var(--surface);stroke:${c}`,"stroke-width":2.5},s);
+    t.split("\n").forEach((ln,j,arr)=>el("text",{x,y:y+4.5+(j-(arr.length-1)/2)*14,"text-anchor":"middle",style:"fill:var(--ink);font:600 12px var(--f-body)",text:ln},s));
+  });
+  el("text",{x:cx,y:cy-8,"text-anchor":"middle",style:"fill:var(--muted);font:500 11.5px var(--f-mono)",text:"AAuth-Requirement:"},s);
+  el("text",{x:cx,y:cy+14,"text-anchor":"middle",style:`fill:${REQ[rq].c};font:700 16px var(--f-mono)`,text:REQ[rq].code},s);
+}
+function reqList(){
+  $("#reqs").innerHTML=REQ.map((r,i)=>`<button class="req" data-i="${i}" style="${i===rq?`border-color:${r.c};box-shadow:0 0 0 2px ${r.c} inset`:''}"><code style="color:${r.c}">${r.code}</code><b>Сервису нужно${r.need[0]===","?"":" "}${r.need}</b><span>Агент ${r.act} · <span class="st">HTTP ${r.st}</span></span></button>`).join("")
+   + `<p class="note">Первые два требования обходятся без Person Server. Агент без Person Server может работать только с ними.</p>`;
+  $("#reqs").querySelectorAll(".req").forEach(b=>b.onclick=()=>{ rq=+b.dataset.i; reqList(); loopDraw(); });
+}
+reqList(); loopDraw();
+
+/* ---------- 6. MISSION ---------- */
+const TAG={
+  mission:["миссия","var(--s-ps)","var(--c-ps)"], chat:["вопрос","var(--s-person)","var(--c-person)"], token:["токен","var(--s-as)","var(--c-as)"],
+  audit:["аудит","var(--s-agent)","var(--c-agent)"], perm:["разрешение","var(--s-ap)","var(--c-ap)"], update:["обновление","var(--s-res)","var(--c-res)"], end:["итог","var(--surface-2)","var(--ink)"]
+};
+const MS={
+ s0:{b:[{w:"agent",h:"<b>Предлагаю миссию</b><br><em>Спланировать и забронировать поездку в Японию на следующий месяц для двоих. Бюджет около $5k. Сначала покажу маршрут, потом бронирую.</em><ul><li>Инструменты: WebSearch, BookFlight, BookHotel</li><li>Сервисы: flights.example, hotels.example</li></ul>"}],
+     a:[["Одобрить","good","s2"],["Спросить агента","","s1"]], pill:["idle","На рассмотрении"]},
+ s1:{b:[{w:"you",h:"Зачем тебе BookFlight с самого начала?"},{w:"agent",h:"Бронировать буду только после того, как ты одобришь маршрут. Для начала хватит поиска и чтения страниц.",claim:true}],
+     log:[["chat","Уточнение: «Зачем BookFlight с самого начала?»"]], a:[["Одобрить","good","s2"]]},
+ s2:{b:[{w:"ps",h:"<b>Миссия одобрена и запечатана.</b> Одобренные инструменты: WebSearch и Read, на всё остальное агент спросит разрешение. Для flights.example и hotels.example сразу выданы токены личности, чтобы агент не просил их по одному."}],
+     log:[["mission","Миссия одобрена · срок 30 дней"],["token","Токены личности: flights.example, hotels.example"]], seal:true, pill:["on","Активна"], a:[["Агент начинает работу →","primary","s3"]]},
+ s3:{b:[{w:"agent",h:"Поискал рейсы в Токио на май. Нашёл 12 вариантов. Это отправлено в журнал как аудит."},{w:"ps",h:"<b>Агент просит разрешение</b><br><code>SendEmail</code>: отправить тебе маршрут на почту.<br><span class='claim'>SendEmail нет среди одобренных инструментов, поэтому спрашиваю тебя.</span>"}],
+     log:[["audit","WebSearch «рейсы в Токио, май» → 12 вариантов"]], a:[["Разрешить","good","s4a"],["Запретить","bad","s4b"]]},
+ s4a:{b:[{w:"agent",h:"Маршрут отправлен тебе на почту."}], log:[["perm","SendEmail: разрешено"],["audit","SendEmail → письмо доставлено"]], a:[["Дальше →","primary","s5"]]},
+ s4b:{b:[{w:"agent",h:"Понял, письмо не отправляю. Показываю маршрут здесь: 7–14 мая, Токио и Киото."}], log:[["perm","SendEmail: запрещено"]], a:[["Дальше →","primary","s5"]]},
+ s5:{b:[{w:"agent",h:"Прошу пропуск для flights.example: «забронировать рейс на 7 мая»."},{w:"ps",h:"<b>Сверил с миссией и журналом.</b> Бронь рейса укладывается в задачу, а сервис ты одобрил заранее. Пропуск выдан, тебя не беспокою.<br><span class='claim'>Бронирование идёт через сервис flights.example, поэтому вместо разрешения на инструмент здесь работает пропуск от сервиса.</span>"}],
+     log:[["token","Пропуск для flights.example: выдан автоматически"],["audit","BookFlight → 2 билета, 7 и 14 мая"]], a:[["Дальше →","primary","s6"]]},
+ s6:{b:[{w:"agent",h:"<b>Изменение в работе</b><br>Отель из маршрута занят. Предлагаю похожий в двух кварталах по той же цене."}],
+     log:[], a:[["Принять изменение","good","s6b"]]},
+ s6b:{b:[{w:"ps",h:"Изменение записано в журнал. Сам текст миссии не меняется: изменения накапливаются рядом с ним, и у каждого свой хеш."}],
+     log:[["update","Отель заменён · хеш Q2h1Y2sg…"],["audit","BookHotel → 7 ночей"]], a:[["Дальше →","primary","s7"]]},
+ s7:{b:[{w:"agent",h:"<b>Предлагаю завершить миссию</b><br>Забронированы рейсы и отель на 7–14 мая, маршрут готов. Итого $4 180."}],
+     log:[], a:[["Принять: миссия выполнена","good","s8"],["Ещё вопрос","","s7b"]]},
+ s7b:{b:[{w:"you",h:"А если планы поменяются?"},{w:"agent",h:"Отель можно бесплатно отменить до 1 мая, билеты с возвратом.",claim:true}],
+     log:[["chat","Вопрос по итогам: отмена бесплатна до 1 мая"]], a:[["Принять: миссия выполнена","good","s8"]]},
+ s8:{b:[{w:"ps",h:"<b>Миссия завершена.</b> Агент может только <em>предложить</em> завершение, закрываешь её ты. Закрытая миссия больше не оживёт: для новой задачи нужна новая миссия."}],
+     log:[["end","Миссия завершена (completed)"]], pill:["off","Завершена"], a:[["Сыграть ещё раз","","reset"]]},
+};
+function msReset(){ $("#ms-log").innerHTML='<li class="empty">Пока пусто</li>'; $("#ms-seal").innerHTML="Текст миссии запечатывается хешем SHA-256. Изменить его задним числом нельзя."; setPill("idle","Нет миссии"); msGo("s0"); }
+function setPill(c,t){ const p=$("#ms-pill"); p.className="pill "+c; p.textContent=t; }
+function msGo(id){
+  if(id==="reset"){ msReset(); return; }
+  const s=MS[id], st=$("#ms-stage");
+  st.innerHTML="";
+  s.b.forEach(b=>{
+    const who = b.w==="agent"?["Агент","var(--c-agent)"] : b.w==="ps"?["Person Server","var(--c-ps)"] : ["Ты","var(--c-person)"];
+    const d=document.createElement("div"); d.className="bubble "+b.w;
+    d.innerHTML=`<div class="from"><i style="background:${who[1]}"></i>${who[0]}${b.claim?' · <span style="text-transform:none;letter-spacing:0">слова агента</span>':''}</div><div>${b.h}</div>`;
+    st.appendChild(d);
+  });
+  const acts=document.createElement("div"); acts.className="actions";
+  s.a.forEach(([l,cls,to])=>{ const b=document.createElement("button"); b.className="btn "+cls; b.textContent=l; b.onclick=()=>msGo(to); acts.appendChild(b); });
+  st.appendChild(acts);
+  if(s.log && s.log.length){ const ol=$("#ms-log"); const em=ol.querySelector(".empty"); if(em) em.remove();
+    s.log.forEach(([t,txt])=>{ const g=TAG[t]; const li=document.createElement("li"); li.innerHTML=`<span class="t" style="background:${g[1]};color:${g[2]}">${g[0]}</span><span>${txt}</span>`; ol.appendChild(li); ol.scrollTop=ol.scrollHeight; }); }
+  if(s.seal) $("#ms-seal").innerHTML='Печать миссии (s256): <b>dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk</b><br>Хеш попадает во все токены агента, поэтому каждый сервис и каждый пропуск привязаны именно к этой задаче.';
+  if(s.pill) setPill(s.pill[0],s.pill[1]);
+}
+msReset();
+
+/* ---------- RESIZE + NAV ---------- */
+let rzT=null, lastW=document.documentElement.clientWidth;
+function relayout(){ const w=document.documentElement.clientWidth; if(w===lastW) return; lastW=w; if(!stBusy) stDraw(); rDraw(); render(false); }
+const onRz=()=>{ clearTimeout(rzT); rzT=setTimeout(relayout,120); };
+if("ResizeObserver" in window) new ResizeObserver(onRz).observe(document.documentElement); else addEventListener("resize",onRz);
+const navLinks=[...document.querySelectorAll('nav.top a[href^="#"]:not(.brand)')];
+/* suggest the other language once, unless the viewer dismissed it */
+try{
+  const PAGE_LANG=document.documentElement.lang||"ru", langs=(navigator.languages||[navigator.language||""]).map(l=>l.toLowerCase());
+  const wantsRu=langs.some(l=>l.startsWith("ru"));
+  const show = PAGE_LANG==="en" ? wantsRu : !wantsRu;
+  let seen=null; try{ seen=localStorage.getItem("aauth-langhint"); }catch(e){}
+  if(show && !seen){ $("#langhint").hidden=false; }
+  $("#lh-x").onclick=()=>{ $("#langhint").hidden=true; try{ localStorage.setItem("aauth-langhint","1"); }catch(e){} };
+}catch(e){}
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ navLinks.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id)); const on=navLinks.find(a=>a.classList.contains("on")); if(on){ const bar=on.parentElement; bar.scrollTo({left:on.offsetLeft-bar.clientWidth/2+on.clientWidth/2,behavior:"smooth"}); } } }); },{rootMargin:"-45% 0px -50% 0px"});
+  document.querySelectorAll("section.ch").forEach(s=>io.observe(s));
+}
+})();
+</script>
+
+</html>
