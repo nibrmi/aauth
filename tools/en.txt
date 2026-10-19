@@ -1,0 +1,682 @@
+# Russian -> English pairs for build.py. Each pair: a ">>> " line (exact Russian source text) then a "<<< " line (English).
+# Every Russian string must appear in the source at least once; build.py fails otherwise.
+
+# ---- head ----
+>>> <title>AAuth на пальцах</title>
+<<< <title>AAuth Explained</title>
+>>> <meta name="description" content="Интерактивная инфографика по протоколу AAuth: паспорт и подпись для ИИ-агентов, пять режимов доступа, миссии и сравнение с OAuth.">
+<<< <meta name="description" content="AAuth explained visually: an interactive guide to the IETF draft that gives AI agents their own identity and signed requests, with five access modes, missions, and a comparison with OAuth.">
+>>> <meta property="og:title" content="AAuth на пальцах">
+<<< <meta property="og:title" content="AAuth Explained">
+>>> <meta property="og:description" content="Как ИИ-агенту представиться, получить разрешение и не утащить чужие ключи. Интерактивная инфографика по черновику IETF.">
+<<< <meta property="og:description" content="How an AI agent proves who it is, gets permission, and never carries a token worth stealing. An interactive guide to the AAuth IETF draft.">
+>>> <meta property="og:url" content="https://nibrmi.github.io/aauth/">
+<<< <meta property="og:url" content="https://nibrmi.github.io/aauth/en/">
+>>> <meta property="og:image" content="https://nibrmi.github.io/aauth/og.png">
+<<< <meta property="og:image" content="https://nibrmi.github.io/aauth/og-en.png">
+>>> <meta property="og:locale" content="ru_RU">
+<<< <meta property="og:locale" content="en_US">
+>>> <meta property="og:locale:alternate" content="en_US">
+<<< <meta property="og:locale:alternate" content="ru_RU">
+>>> <link rel="canonical" href="https://nibrmi.github.io/aauth/">
+<<< <link rel="canonical" href="https://nibrmi.github.io/aauth/en/">
+>>> <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AAuth на пальцах","inLanguage":"ru","url":"https://nibrmi.github.io/aauth/","description":"Интерактивная инфографика по протоколу AAuth: паспорт и подпись для ИИ-агентов, пять режимов доступа, миссии и сравнение с OAuth.","about":{"@type":"Thing","name":"AAuth protocol","sameAs":"https://datatracker.ietf.org/doc/draft-hardt-oauth-aauth-protocol/"},"image":"https://nibrmi.github.io/aauth/og.png"}</script>
+<<< <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AAuth Explained","inLanguage":"en","url":"https://nibrmi.github.io/aauth/en/","description":"An interactive visual guide to AAuth, the IETF draft protocol that gives AI agents their own cryptographic identity, signed requests, five access modes and missions.","about":{"@type":"Thing","name":"AAuth protocol","sameAs":"https://datatracker.ietf.org/doc/draft-hardt-oauth-aauth-protocol/"},"image":"https://nibrmi.github.io/aauth/og-en.png"}</script>
+
+# ---- nav and language ----
+>>> <nav class="top" aria-label="Разделы">
+<<< <nav class="top" aria-label="Sections">
+>>> <a href="#problem">Зачем</a>
+<<< <a href="#problem">Why</a>
+>>> <a href="#roles">Кто участвует</a>
+<<< <a href="#roles">Who’s involved</a>
+>>> <a href="#tokens">Документы</a>
+<<< <a href="#tokens">Tokens</a>
+>>> <a href="#modes">5 режимов</a>
+<<< <a href="#modes">5 modes</a>
+>>> <a href="#loop">Главный цикл</a>
+<<< <a href="#loop">The loop</a>
+>>> <a href="#mission">Миссии</a>
+<<< <a href="#mission">Missions</a>
+>>> <a href="#more">Ещё фишки</a>
+<<< <a href="#more">More</a>
+>>> <a href="#faq">Вопросы</a>
+<<< <a href="#faq">FAQ</a>
+>>> <a href="#status">Статус</a>
+<<< <a href="#status">Status</a>
+>>> <a class="lang" href="https://nibrmi.github.io/aauth/en/" hreflang="en" lang="en" title="English version">EN</a>
+<<< <a class="lang" href="https://nibrmi.github.io/aauth/" hreflang="ru" lang="ru" title="Русская версия">RU</a>
+>>> <div class="langhint" id="langhint" hidden><div class="wrap"><span lang="en">This page is also available in English.</span><a href="https://nibrmi.github.io/aauth/en/" hreflang="en" lang="en">Open the English version →</a><button id="lh-x" aria-label="Close">×</button></div></div>
+<<< <div class="langhint" id="langhint" hidden><div class="wrap"><span lang="ru">Эта страница есть и на русском.</span><a href="https://nibrmi.github.io/aauth/" hreflang="ru" lang="ru">Открыть русскую версию →</a><button id="lh-x" aria-label="Закрыть">×</button></div></div>
+
+# ---- hero ----
+>>> Черновик IETF · draft-hardt-oauth-aauth-protocol-11
+<<< IETF draft · draft-hardt-oauth-aauth-protocol-11
+>>> <p class="tag">Паспорт, подпись и доверенное лицо для <span style="white-space:nowrap">ИИ-агентов</span></p>
+<<< <p class="tag">A passport, a signature and a personal representative for AI agents</p>
+>>> Новый протокол от Дика Хардта, редактора OAuth 2.0. Он отвечает на три вопроса: кто этот агент, за кого он работает и что ему разрешено. Без API-ключей, без регистрации на каждом сайте и без токенов, которые сработают в чужих руках.
+<<< A new protocol from Dick Hardt, editor of OAuth 2.0. It answers three questions: who is this agent, who is it acting for, and what is it allowed to do. No API keys, no signing up at every site, and no tokens that work in a thief’s hands.
+>>> <i></i>Без предварительной регистрации</span>
+<<< <i></i>No pre-registration</span>
+>>> <i></i>Без общих секретов</span>
+<<< <i></i>No shared secrets</span>
+>>> <i></i>Каждый запрос подписан</span>
+<<< <i></i>Every request is signed</span>
+>>> Посмотреть, как работает
+<<< See how it works
+>>> Попробовать украсть токен
+<<< Try to steal a token
+>>> aria-label="Пример паспорта агента"
+<<< aria-label="Example agent passport"
+>>> ПАСПОРТ АГЕНТА
+<<< AGENT PASSPORT
+>>> <dt>Кто</dt>
+<<< <dt>Who</dt>
+>>> <dt>Выдал</dt>
+<<< <dt>Issued by</dt>
+>>> <dt>Представитель (PS)</dt>
+<<< <dt>Representative (PS)</dt>
+>>> ДЕЙСТВУЕТ ≤ 24 Ч
+<<< VALID ≤ 24 H
+>>> ПОДПИСЬ ВЕРНА
+<<< SIGNATURE OK
+>>> <span class="k">идея 1</span><b>У агента свой паспорт и своя подпись</b><p>Каждая копия агента получает ID и секретный ключ. Каждый запрос подписан. Украденный токен без ключа ничего не стоит.</p>
+<<< <span class="k">idea 1</span><b>The agent has its own passport and signature</b><p>Every running copy of an agent gets an ID and a secret key. Every request is signed. A stolen token is worthless without the key.</p>
+>>> <span class="k">идея 2</span><b>У человека есть доверенное лицо</b><p>Person Server говорит сервисам, за кого работает агент, спрашивает твоё согласие и ведёт журнал всего, что агент делал.</p>
+<<< <span class="k">idea 2</span><b>The person has a representative</b><p>The Person Server tells services who the agent works for, asks for your consent, and keeps a log of everything the agent did.</p>
+>>> <span class="k">идея 3</span><b>Сервис сам решает, сколько ему знать</b><p>Пять режимов: от «мне достаточно знать, какой это агент» до «пусть мой сервер доступа проверит все правила».</p>
+<<< <span class="k">idea 3</span><b>The service decides how much it needs to know</b><p>Five modes, from “knowing which agent this is will do” to “let my access server check every rule.”</p>
+
+# ---- 01 problem ----
+>>> 01 · ЗАЧЕМ
+<<< 01 · WHY
+>>> <h2>Попробуй украсть токен</h2>
+<<< <h2>Try to steal a token</h2>
+>>> Сегодня агенты ходят в сервисы с API-ключами и OAuth-токенами «на предъявителя». Кто держит токен, тот и пользуется. Переключи режим и нажми кнопку.
+<<< Today agents call services with API keys and OAuth bearer tokens. Whoever holds the token can use it. Pick a mode and press the button.
+>>> aria-label="Режим"
+<<< aria-label="Mode"
+>>> Сейчас: API-ключ, OAuth
+<<< Today: API key, OAuth
+>>> Воришка перехватывает токен
+<<< A thief grabs the token
+>>> aria-label="Схема перехвата токена"
+<<< aria-label="Token theft diagram"
+
+# ---- 02 roles ----
+>>> 02 · КТО УЧАСТВУЕТ
+<<< 02 · WHO’S INVOLVED
+>>> Шесть действующих лиц
+<<< Six parties
+>>> Нажми на любого участника, чтобы увидеть, чем он занят и с кем общается. В каждом конкретном случае участвуют не все.
+<<< Tap any party to see what it does and who it talks to. Not every party takes part in every flow.
+>>> aria-label="Схема участников"
+<<< aria-label="Diagram of the parties"
+
+# ---- 03 tokens ----
+>>> 03 · ДОКУМЕНТЫ
+<<< 03 · TOKENS
+>>> Четыре документа и один пропуск-на-сессию
+<<< Four documents and a session pass
+>>> Все токены AAuth живут недолго и подписаны тем, кто их выдал. Цвет полоски показывает, кто выдаёт документ.
+<<< Every AAuth token is short-lived and signed by whoever issued it. The color stripe shows who issues each one.
+>>> <b>Главное правило:</b> каждый документ привязан к ключу агента (поля <code>cnf</code> или <code>agent_jkt</code>). Если запрос не подписан этим ключом, документ недействителен. Поэтому красть его бесполезно.
+<<< <b>The golden rule:</b> every token is bound to the agent’s key (the <code>cnf</code> or <code>agent_jkt</code> claim). If a request isn’t signed with that key, the token is void. That’s why stealing it is pointless.
+
+# ---- 04 modes (markup) ----
+>>> 04 · ПЯТЬ РЕЖИМОВ
+<<< 04 · FIVE MODES
+>>> Посмотри, как это работает, шаг за шагом
+<<< Watch it work, step by step
+>>> Выбери режим и жми «Дальше» (или стрелки на клавиатуре). Режимы отличаются тем, что сервис в итоге знает. Один сервис может использовать разные режимы для разных адресов.
+<<< Pick a mode and press “Next” (or use the arrow keys). The modes differ in what the service ends up knowing. One service can use different modes on different endpoints.
+>>> Режимы листаются вбок →
+<<< Swipe for more modes →
+>>> aria-label="Диаграмма обмена сообщениями"
+<<< aria-label="Message sequence diagram"
+>>> 1<small>из 4</small>
+<<< 1<small>of 4</small>
+>>> title="Сначала" aria-label="Сначала"
+<<< title="Restart" aria-label="Restart"
+>>> aria-label="Назад">← <span class="hide-s">Назад</span>
+<<< aria-label="Back">← <span class="hide-s">Back</span>
+>>> Дальше →
+<<< Next →
+>>> <span class="hide-s">Автоплей</span>
+<<< <span class="hide-s">Autoplay</span>
+>>> <span class="hide-s">Пауза</span>
+<<< <span class="hide-s">Pause</span>
+>>> <h3>Сколько сервис узнаёт в каждом режиме</h3><p>Чем выше столбик, тем больше сервис знает перед тем, как ответить. Нажми на столбик, чтобы открыть режим.</p>
+<<< <h3>How much the service learns in each mode</h3><p>The taller the bar, the more the service knows before it answers. Tap a bar to open that mode.</p>
+
+# ---- 05 loop (markup) ----
+>>> 05 · ГЛАВНЫЙ ЦИКЛ
+<<< 05 · THE LOOP
+>>> Агенту не нужно знать сервис заранее
+<<< The agent doesn’t need to know the service in advance
+>>> Агент всегда делает одно и то же: отправляет запрос, читает заголовок <code>AAuth-Requirement</code> («что мне от тебя нужно»), выполняет требование и повторяет. Первый запрос к сервису и есть регистрация.
+<<< The agent always does the same thing: send a request, read the <code>AAuth-Requirement</code> header (“here’s what I need from you”), satisfy it, and retry. The first request to a service is the registration.
+>>> aria-label="Цикл запроса"
+<<< aria-label="Request loop"
+
+# ---- 06 mission (markup) ----
+>>> 06 · МИССИИ
+<<< 06 · MISSIONS
+>>> Ты даёшь агенту задание, Person Server за ним присматривает
+<<< You give the agent a task, the Person Server keeps an eye on it
+>>> Миссия описывает задачу обычным текстом. Агент её предлагает, ты одобряешь. Дальше Person Server сверяет с миссией каждое действие агента и записывает всё в журнал. Миссии необязательны. Сыграй за человека.
+<<< A mission describes the task in plain language. The agent proposes it, you approve it. From then on the Person Server checks every action against the mission and logs everything. Missions are optional. Play the human.
+>>> <h3>Журнал миссии</h3>
+<<< <h3>Mission log</h3>
+>>> Нет миссии
+<<< No mission
+>>> Текст миссии запечатывается хешем SHA-256. Изменить его задним числом нельзя.
+<<< The mission text is sealed with a SHA-256 hash. It can’t be changed after the fact.
+>>> Пока пусто
+<<< Empty so far
+
+# ---- 07 more ----
+>>> 07 · ЕЩЁ ФИШКИ
+<<< 07 · MORE
+>>> Что ещё продумано
+<<< What else is built in
+>>> <h3>Субагенты</h3><p>Главный агент может запускать помощников. У каждого свой паспорт с пометкой <code>parent_agent</code>. Сами к Person Server они не ходят: пропуска для них берёт родитель. Глубина только один уровень.</p>
+<<< <h3>Sub-agents</h3><p>A main agent can spawn helpers. Each gets its own passport marked with <code>parent_agent</code>. They never call the Person Server themselves: the parent gets their passes. Only one level deep.</p>
+>>> <h3>Цепочки вызовов</h3><p>Сервис, которому для ответа нужен другой сервис, сам становится агентом со своим паспортом. Права человека передаются по цепочке, и Person Server видит каждое звено.</p>
+<<< <h3>Call chaining</h3><p>A service that needs another service to answer becomes an agent itself, with its own passport. The person’s authority flows down the chain, and the Person Server sees every link.</p>
+>>> <h3>Нет «вечных» токенов</h3><p>Паспорт агента живёт до 24 часов, токен личности до часа, заявка до 5 минут. Refresh-токенов нет: когда пропуск истёк, агент снова спрашивает сервис, и у сервиса есть право сказать «нет».</p>
+<<< <h3>No forever tokens</h3><p>An agent passport lasts up to 24 hours, a person token up to an hour, an access request up to 5 minutes. There are no refresh tokens: when a pass expires, the agent asks the service again, and the service can say no.</p>
+>>> <h3>Отзыв каскадом</h3><p>Отозвал токен личности, и Person Server сообщает об этом сервису и серверу доступа. Тот, в свою очередь, гасит все пропуска, выданные по этому токену.</p>
+<<< <h3>Cascading revocation</h3><p>Revoke a person token and the Person Server tells the service and the access server. The access server in turn cancels every pass it issued against that token.</p>
+>>> <h3>Приватность</h3><p>Для каждого сайта у тебя свой псевдоним (<code>sub</code>). Сайты не могут сопоставить тебя между собой. В режимах 3–5 сервис даже не видит, какой именно агент пришёл, поэтому не может пускать «только агентов от компании X».</p>
+<<< <h3>Privacy</h3><p>You get a different pseudonym (<code>sub</code>) at every site, so sites can’t link you to each other. In modes 3–5 the service doesn’t even see which agent product showed up, so it can’t admit “only agents from company X.”</p>
+>>> <h3>Честное окно согласия</h3><p>Person Server обязан визуально отделять слова агента («мне нужно, потому что…») от того, что заявил сам сервис. Агенту выгодно, чтобы ему поверили, и ты должен видеть, где чьи слова.</p>
+<<< <h3>An honest consent screen</h3><p>The Person Server must visually separate the agent’s words (“I need this because…”) from what the service itself declared. The agent gains from being believed, so you should see who said what.</p>
+>>> <h3>Внедрять можно по частям</h3><p>Каждая сторона подключается сама по себе. Сервис может начать с проверки подписи вместо API-ключа. Тот, кто AAuth не знает, просто игнорирует новые заголовки, и всё старое продолжает работать.</p>
+<<< <h3>Adopt it piece by piece</h3><p>Each party joins on its own. A service can start by checking signatures instead of API keys. Anyone who doesn’t know AAuth simply ignores the new headers, and everything old keeps working.</p>
+>>> <h3>Целое семейство черновиков</h3><p>Рядом с основным протоколом развиваются отдельные документы: Budgets (лимиты трат агента), Events (уведомления агентам), R3 (права в терминах MCP, OpenAPI, gRPC, GraphQL) и Bootstrap (как агент получает паспорт).</p>
+<<< <h3>A whole family of drafts</h3><p>Separate documents grow alongside the core protocol: Budgets (agent spending limits), Events (notifications to agents), R3 (permissions in MCP, OpenAPI, gRPC and GraphQL terms) and Bootstrap (how an agent gets its passport).</p>
+
+# ---- 08 compare ----
+>>> 08 · СРАВНЕНИЕ
+<<< 08 · COMPARISON
+>>> Чем это лучше OAuth для агентов
+<<< Why it beats OAuth for agents
+>>> AAuth не заменяет OAuth целиком. Сервис может спрятать свой существующий OAuth внутрь сессионного токена, а Person Server может логинить людей через OpenID Connect.
+<<< AAuth doesn’t replace OAuth everywhere. A service can wrap its existing OAuth inside a session token, and a Person Server can sign people in with OpenID Connect.
+>>> <th>OAuth 2.0 и API-ключи</th>
+<<< <th>OAuth 2.0 and API keys</th>
+>>> <td>Кто такой клиент</td><td><span class="x">✕</span>client_id выдаёт каждый сервер свой: id в Google ничего не значит в GitHub</td><td><span class="v">✓</span>Один ID <code>aauth:имя@домен</code>, его может проверить кто угодно</td>
+<<< <td>Client identity</td><td><span class="x">✕</span>Every server issues its own client_id: an ID at Google means nothing at GitHub</td><td><span class="v">✓</span>One ID, <code>aauth:name@domain</code>, that anyone can verify</td>
+>>> <td>Регистрация</td><td><span class="x">✕</span>Заранее на каждом сервере (или Dynamic Client Registration, как в MCP)</td><td><span class="v">✓</span>Не нужна: первый запрос и есть регистрация</td>
+<<< <td>Registration</td><td><span class="x">✕</span>Up front at every server (or Dynamic Client Registration, as in MCP)</td><td><span class="v">✓</span>Not needed: the first request is the registration</td>
+>>> <td>Кража токена</td><td><span class="x">✕</span>Токен на предъявителя: кто украл, тот и вошёл</td><td><span class="v">✓</span>Токен привязан к ключу, каждый запрос подписан</td>
+<<< <td>Stolen token</td><td><span class="x">✕</span>Bearer token: whoever steals it gets in</td><td><span class="v">✓</span>The token is bound to a key and every request is signed</td>
+>>> <td>Копии агента</td><td><span class="x">✕</span>Один client_id на всё приложение</td><td><span class="v">✓</span>ID у каждой запущенной копии: отозвать можно одну</td>
+<<< <td>Agent instances</td><td><span class="x">✕</span>One client_id for the whole app</td><td><span class="v">✓</span>Every running copy has its own ID, so you can revoke just one</td>
+>>> <td>Подлинность сервиса</td><td><span class="x">✕</span>Сервис криптографически не подтверждает, кто он</td><td><span class="v">✓</span>Сервис подписывает заявку (resource token)</td>
+<<< <td>Service identity</td><td><span class="x">✕</span>The service doesn’t cryptographically prove who it is</td><td><span class="v">✓</span>The service signs its access request (resource token)</td>
+>>> <td>Контроль за агентом</td><td><span class="x">✕</span>Нет</td><td><span class="v">✓</span>Миссии, разрешения на действия, аудит, вопросы человеку</td>
+<<< <td>Agent oversight</td><td><span class="x">✕</span>None</td><td><span class="v">✓</span>Missions, action permissions, audit, questions to the person</td>
+>>> <td>Чей сервер решает</td><td><span class="x">✕</span>Всегда сервер владельца ресурса</td><td><span class="v">✓</span>Твой Person Server и сервер доступа сервиса договариваются между собой</td>
+<<< <td>Who decides</td><td><span class="x">✕</span>Always the resource owner’s server</td><td><span class="v">✓</span>Your Person Server and the service’s access server work it out together</td>
+>>> <td>Продление</td><td>Refresh-токены</td><td>Нет refresh: каждый раз заново, у сервиса есть право голоса</td>
+<<< <td>Renewal</td><td>Refresh tokens</td><td>No refresh: ask again each time, and the service gets a say</td>
+
+# ---- 09 faq ----
+>>> 09 · ВОПРОСЫ
+<<< 09 · FAQ
+>>> Частые вопросы
+<<< Frequently asked questions
+>>> <summary>Это уже можно использовать?</summary><p>Попробовать можно: есть SDK для TypeScript, .NET, Python и Go, расширение для Keycloak, готовый Person Server и демо-песочницы (AAuth Explorer, AAuth Web Agent). Но это черновик, а не стандарт. Между версиями меняются названия полей и даже число режимов, так что для боевых систем пока рано.</p>
+<<< <summary>Can I use it today?</summary><p>You can try it: there are SDKs for TypeScript, .NET, Python and Go, a Keycloak extension, a ready-made Person Server and demo playgrounds (AAuth Explorer, AAuth Web Agent). But it’s a draft, not a standard. Field names and even the number of modes change between versions, so it’s too early for production.</p>
+>>> <summary>Это замена OAuth?</summary><p>Нет, скорее надстройка для мира агентов. Обычные приложения с OAuth продолжат работать как раньше. Сервис может спрятать свой OAuth-токен внутрь сессионного токена AAuth, а Person Server может логинить людей через OpenID Connect.</p>
+<<< <summary>Does it replace OAuth?</summary><p>No, it’s more of a layer for the world of agents. Regular apps with OAuth keep working as before. A service can wrap its OAuth token inside an AAuth session token, and a Person Server can sign people in with OpenID Connect.</p>
+>>> <summary>Что изменится для обычного человека?</summary><p>Появится место, где видно всех твоих агентов: какие подключены, на каких устройствах, какие у них задания и что они уже сделали. Там же можно ответить на вопрос агента, разрешить или запретить действие и отозвать доступ. Это и есть Person Server.</p>
+<<< <summary>What changes for an ordinary person?</summary><p>You get one place that shows all your agents: which are connected, on which devices, what tasks they have and what they’ve already done. That’s also where you answer an agent’s question, allow or block an action, and revoke access. That place is your Person Server.</p>
+>>> <summary>А если украдут сам секретный ключ агента?</summary><p>Тогда провайдер агента перестаёт выдавать ему паспорт и отзывает текущий через Person Server. Паспорт живёт не больше суток, токен личности не больше часа. Есть слабое место: сервис, который пускает агента только по паспорту (режим 1), сообщения об отзыве не получает. Там доступ закончится, когда истечёт паспорт.</p>
+<<< <summary>What if the agent’s secret key itself is stolen?</summary><p>Then the agent provider stops issuing it passports and revokes the current one through the Person Server. A passport lasts at most a day, a person token at most an hour. There is one weak spot: a service that admits the agent on its passport alone (mode 1) never hears about the revocation, so there access ends only when the passport expires.</p>
+>>> <summary>Как это связано с MCP?</summary><p>MCP сейчас использует OAuth 2.1 и динамическую регистрацию клиентов: на каждом сервере у агента новый client_id, а токены на предъявителя. Автор AAuth приводит MCP как пример, где эти ограничения уже мешают. Для MCP-серверов уже есть реализации AAuth: TypeScript SDK для MCP-серверов и модуль для Envoy и agentgateway, который превращает MCP-сервис в AAuth-ресурс.</p>
+<<< <summary>How does this relate to MCP?</summary><p>MCP currently uses OAuth 2.1 with Dynamic Client Registration: the agent gets a new client_id at every server, and tokens are bearer tokens. The AAuth author points to MCP as a place where those limits already hurt. AAuth implementations for MCP already exist: a TypeScript SDK for MCP servers and an Envoy / agentgateway module that turns an MCP service into an AAuth resource.</p>
+>>> <summary>Кто будет моим Person Server?</summary><p>Его выбираешь ты сам, его никто не навязывает. Это может быть сервис твоего провайдера входа, твоя компания (один сервер выполняет роли провайдера агентов, Person Server и Access Server для сотрудников) или даже свой собственный сервер. В спецификации есть раздел о том, как сделать минимальный Person Server.</p>
+<<< <summary>Who will be my Person Server?</summary><p>You choose it; nobody imposes it. It could be a service from your sign-in provider, your company (one server acting as agent provider, Person Server and Access Server for employees), or even a server of your own. The spec has a section on building a minimal Person Server.</p>
+>>> <summary>Зачем целых пять режимов? Не слишком сложно?</summary><p>Каждый сервис берёт только то, что ему нужно, и не обязан внедрять всё сразу. Обычно большинство адресов работают по личности агента или человека, и только несколько важных действий (оплата, запись, удаление) требуют полноценного разрешения.</p>
+<<< <summary>Why five modes? Isn’t that too complicated?</summary><p>Each service takes only what it needs and doesn’t have to adopt everything at once. Usually most endpoints run on the agent’s or the person’s identity, and only a few important actions (payments, writes, deletes) need full authorization.</p>
+
+# ---- 10 status ----
+>>> 10 · СТАТУС
+<<< 10 · STATUS
+>>> Где протокол сейчас
+<<< Where the protocol stands
+>>> Это личный черновик (Internet-Draft), а не принятый стандарт. Детали меняются от версии к версии: только в -11 появился токен личности, и режимов стало пять вместо четырёх.
+<<< This is an individual Internet-Draft, not an adopted standard. Details change between versions: the person token only arrived in -11, taking the modes from four to five.
+>>> <span>Версия</span><b>-11</b><span>12-я ревизия (00–11), раньше назывался draft-hardt-aauth-protocol</span>
+<<< <span>Version</span><b>-11</b><span>12th revision (00–11), previously named draft-hardt-aauth-protocol</span>
+>>> <span>Опубликована</span><b>25.09.2026</b><span>истекает 29.03.2027</span>
+<<< <span>Published</span><b>Sep 25, 2026</b><span>expires Mar 29, 2027</span>
+>>> <span>Автор</span><b>Dick Hardt</b><span>Hellō, редактор OAuth 2.0 (RFC 6749)</span>
+<<< <span>Author</span><b>Dick Hardt</b><span>Hellō, editor of OAuth 2.0 (RFC 6749)</span>
+>>> <span>Опирается на</span>
+<<< <span>Built on</span>
+>>> <span>Реализации</span><b>SDK и сервера</b><span>TypeScript, .NET, Python, Go, расширение Keycloak, Person Server</span>
+<<< <span>Implementations</span><b>SDKs and servers</b><span>TypeScript, .NET, Python, Go, a Keycloak extension, a Person Server</span>
+
+# ---- footer ----
+>>> <p><b>Источники</b></p>
+<<< <p><b>Sources</b></p>
+>>> draft-hardt-oauth-aauth-protocol на IETF Datatracker
+<<< draft-hardt-oauth-aauth-protocol on the IETF Datatracker
+>>> : исходники и сопутствующие черновики
+<<< : source and companion drafts
+>>> <a href="https://www.aauth.dev">aauth.dev</a> и <a
+<<< <a href="https://www.aauth.dev">aauth.dev</a> and <a
+>>> Неофициальная инфографика. Не связана с IETF и автором протокола. Схемы упрощены, названия полей и сообщений взяты из версии -11.
+<<< Unofficial infographic, not affiliated with the IETF or the protocol’s author. Diagrams are simplified; field and message names follow version -11.
+
+# ---- script: parties ----
+>>> name:"Человек", sub:"ты"
+<<< name:"Person", sub:"you"
+>>> name:"Агент", sub:"ИИ-программа"
+<<< name:"Agent", sub:"AI program"
+>>> name:"Провайдер агента", sub:"AP"
+<<< name:"Agent Provider", sub:"AP"
+>>> name:"Сервис", sub:"Resource / API"
+<<< name:"Service", sub:"Resource / API"
+>>> sub:"твой представитель"
+<<< sub:"your representative"
+>>> sub:"охрана сервиса"
+<<< sub:"the service’s gatekeeper"
+
+# ---- script: steal demo ----
+>>> text:"Воришка"
+<<< text:"Thief"
+>>> "ключ только у агента"
+<<< "only the agent has the key"
+>>> "подпись + паспорт"
+<<< "signature + passport"
+>>> "<b>Как сейчас</b><ul><li>API-ключ это общий секрет: его копируют туда, где работает агент.</li><li>OAuth-токен «на предъявителя»: сервис не спрашивает, кто его принёс.</li><li>Любой секрет, который копируют, рано или поздно утечёт.</li></ul>"
+<<< "<b>Today</b><ul><li>An API key is a shared secret: it gets copied to wherever the agent runs.</li><li>An OAuth token is a bearer token: the service doesn’t ask who brought it.</li><li>Any secret that gets copied will leak sooner or later.</li></ul>"
+>>> "<b>В AAuth</b><ul><li>Секретный ключ никогда не покидает агента.</li><li>Каждый запрос подписан этим ключом (RFC 9421).</li><li>Токен в запросе только говорит, какой ключ должен был подписать.</li></ul>"
+<<< "<b>With AAuth</b><ul><li>The secret key never leaves the agent.</li><li>Every request is signed with that key (RFC 9421).</li><li>The token in the request only says which key should have signed it.</li></ul>"
+>>> "<b>Воришка вошёл. 200 OK</b><ul><li>Он просто вставил украденный токен в свой запрос.</li><li>Сервис не может отличить его от настоящего агента.</li><li>Доступ сохраняется, пока токен не отзовут вручную.</li></ul>"
+<<< "<b>The thief is in. 200 OK</b><ul><li>They just pasted the stolen token into their own request.</li><li>The service can’t tell them apart from the real agent.</li><li>Access lasts until someone revokes the token by hand.</li></ul>"
+>>> "<b>Отказ. 401: подпись не сходится</b><ul><li>Токен у воришки есть, а секретного ключа нет.</li><li>Подделать подпись под свой запрос он не может.</li><li>К тому же токены живут от 5 минут до 24 часов.</li></ul>"
+<<< "<b>Denied. 401: signature doesn’t match</b><ul><li>The thief has the token but not the secret key.</li><li>They can’t forge a signature for their own request.</li><li>And tokens only live from 5 minutes to 24 hours anyway.</li></ul>"
+>>> text:"копия токена"
+<<< text:"copied token"
+>>> "200 OK, входи"
+<<< "200 OK, come in"
+>>> "401 Отказ"
+<<< "401 Denied"
+>>> textContent="Ещё раз"
+<<< textContent="Again"
+
+# ---- script: roles ----
+>>> l:"поручает задачу",ln:"поручает"
+<<< l:"gives a task",ln:"assigns"
+>>> l:"миссии и согласие"
+<<< l:"missions & consent"
+>>> l:"федерация"
+<<< l:"federation"
+>>> l:"токены личности и пропуска",ln:"токены и пропуска"
+<<< l:"person tokens & passes",ln:"tokens & passes"
+>>> l:"паспорт"}
+<<< l:"passport"}
+>>> l:"подписанные запросы"
+<<< l:"signed requests"
+>>> l:"работает на сервис"
+<<< l:"works for the service"
+>>> t:"Ты или твоя компания. От твоего имени работает агент, и ты за него отвечаешь. Ты одобряешь миссии и даёшь согласие на доступ.", a:"Хозяин, который дал курьеру поручение."
+<<< t:"You or your company. The agent acts on your behalf, and you are accountable for it. You approve missions and consent to access.", a:"The boss who sends a courier on an errand."
+>>> t:"ИИ-программа, которая ходит по сервисам. У каждой запущенной копии свой ID вида aauth:assistant@agent.example и свой секретный ключ. Каждый запрос она подписывает.", a:"Курьер с паспортом и личной печатью."
+<<< t:"An AI program that calls services. Every running copy has its own ID like aauth:assistant@agent.example and its own secret key, and it signs every request.", a:"A courier with a passport and a personal seal."
+>>> t:"Платформа, которая выпускает агенту паспорт (agent token) и обновляет его минимум раз в сутки. Перестала выдавать, и агент фактически выключен. Сервисам достаточно доверять ключам провайдера, а не каждому агенту.", a:"Паспортный стол."
+<<< t:"The platform that issues the agent its passport (agent token) and renews it at least once a day. If it stops issuing, the agent is effectively switched off. Services only need to trust the provider’s keys, not every single agent.", a:"The passport office."
+>>> t:"API, куда идёт агент: календарь, авиакомпания, база данных. Сам решает, что ему нужно знать перед тем, как ответить: какой агент, какой человек или полноценное разрешение.", a:"Здание, куда пришёл курьер."
+<<< t:"The API the agent calls: a calendar, an airline, a database. It decides what it needs to know before it answers: which agent, which person, or full authorization.", a:"The building the courier walks into."
+>>> t:"Твой цифровой представитель, и выбираешь его ты. Подтверждает сервисам, за кого работает агент, спрашивает твоё согласие, ведёт миссии и журнал, передаёт тебе вопросы агента.", a:"Личный секретарь с доверенностью."
+<<< t:"Your digital representative, and you choose it. It confirms to services who the agent works for, asks for your consent, runs missions and the log, and relays the agent’s questions to you.", a:"A personal assistant with power of attorney."
+>>> t:"Проверяет правила конкретного сервиса и выдаёт пропуск. Договаривается с твоим Person Server. Работает на сервис, а не на тебя.", a:"Бюро пропусков в здании."
+<<< t:"Checks a specific service’s rules and issues the pass. Negotiates with your Person Server. Works for the service, not for you.", a:"The front desk that hands out visitor badges."
+>>> <b>На пальцах:</b>
+<<< <b>In plain terms:</b>
+>>> Person Server работает на тебя, Access Server на сервис. В OAuth эти интересы смешаны в одном сервере авторизации, и для агентов, которые ходят между разными компаниями, это проблема.
+<<< The Person Server works for you, the Access Server for the service. OAuth mixes those interests in a single authorization server, which is a problem for agents that move between companies.
+
+# ---- script: tokens ----
+>>> n:"Паспорт агента"
+<<< n:"Agent passport"
+>>> from:"Провайдер агента", life:"≤ 24 ч"
+<<< from:"Agent Provider", life:"≤ 24 h"
+>>> says:"«Это агент aauth:assistant@agent.example, вот его открытый ключ. Его представитель: ps.example»"
+<<< says:"“This is agent aauth:assistant@agent.example, here is its public key. Its representative: ps.example”"
+>>> n:"Токен личности"
+<<< n:"Person token"
+>>> life:"≤ 1 ч"
+<<< life:"≤ 1 h"
+>>> says:"«Этот агент действует за человека 8f14e45f… на сайте resource.example». Прав не даёт, только сообщает, кто ты."
+<<< says:"“This agent acts for person 8f14e45f… at resource.example.” It grants no rights; it only says who you are."
+>>> … ключ агента …
+<<< … agent’s key …
+>>> n:"Заявка"
+<<< n:"Access request"
+>>> from:"Сервис", life:"≤ 5 мин"
+<<< from:"The service", life:"≤ 5 min"
+>>> says:"«Я, сервис X, прошу для человека Y и агента с ключом Z права calendar.write». Агент несёт её своему Person Server."
+<<< says:"“I, service X, request calendar.write for person Y and the agent with key Z.” The agent carries it to its Person Server."
+>>> n:"Пропуск"
+<<< n:"Access pass"
+>>> from:"Person Server или Access Server", life:"не дольше токена-основания"
+<<< from:"Person Server or Access Server", life:"no longer than the token it was based on"
+>>> says:"«Разрешено: вот права и данные о человеке». С ним агент выполняет нужное действие."
+<<< says:"“Allowed: here are the rights and the person’s details.” With it, the agent does the actual work."
+>>> n:"Сессионный токен"
+<<< n:"Session token"
+>>> from:"Сервис, для себя", life:"на усмотрение сервиса"
+<<< from:"The service, for itself", life:"up to the service"
+>>> says:"Сервис заворачивает в него свой обычный OAuth или сессию. Работает только вместе с подписью агента. Новый приходит в любом ответе, отдельного refresh нет."
+<<< says:"The service wraps its usual OAuth token or session inside. It only works together with the agent’s signature. A new one can arrive in any response; there’s no separate refresh."
+>>> <span class="life">живёт ${t.life}</span>
+<<< <span class="life">valid ${t.life}</span>
+>>> Выдаёт: <b>
+<<< Issued by: <b>
+>>> Заглянуть внутрь →
+<<< Look inside →
+
+# ---- script: modes ----
+>>> n:"Режим 1", t:"Только агент", k:"Замена API-ключа", knows:"какой это агент"
+<<< n:"Mode 1", t:"Agent only", k:"Replaces API keys", knows:"which agent it is"
+>>> when:"Сервису достаточно знать, какой агент пришёл, например публичное API с лимитами на агента. Ни Person Server, ни Access Server не нужны."
+<<< when:"The service only needs to know which agent showed up, say a public API with per-agent rate limits. No Person Server or Access Server needed."
+>>> l:"паспорт агента"
+<<< l:"agent passport"
+>>> cap:"Агент создаёт себе пару ключей и доказывает провайдеру, кто он. Провайдер выдаёт паспорт: ID агента, привязанный к его открытому ключу."
+<<< cap:"The agent creates a key pair and proves to its provider who it is. The provider issues a passport: the agent’s ID bound to its public key."
+>>> sub=aauth:assistant@agent.example · живёт ≤ 24 ч
+<<< sub=aauth:assistant@agent.example · valid ≤ 24 h
+>>> l:"запрос + подпись + паспорт"
+<<< l:"request + signature + passport"
+>>> cap:"Агент подписывает запрос своим секретным ключом и кладёт паспорт в заголовок. Регистрироваться на сервисе заранее не нужно."
+<<< cap:"The agent signs the request with its secret key and puts the passport in a header. No need to register with the service first."
+>>> l:"проверяю подпись и паспорт"
+<<< l:"checking signature & passport"
+>>> cap:"Сервис проверяет подпись по ключу из паспорта, а сам паспорт по ключам провайдера, опубликованным на его сайте."
+<<< cap:"The service checks the signature against the key in the passport, and the passport against the provider’s keys published on its site."
+>>> cap:"Сервис знает, какой агент пришёл, и решает сам, пускать ли его. Общих секретов нет, утекать нечему."
+<<< cap:"The service knows which agent showed up and decides for itself whether to let it in. No shared secrets, nothing to leak."
+>>> d:"Если паспорта не было: 401 + AAuth-Requirement: requirement=agent-token"
+<<< d:"If there was no passport: 401 + AAuth-Requirement: requirement=agent-token"
+>>> n:"Режим 2", t:"Сервис сам", k:"Замена обычного OAuth", knows:"какой человек (сам выяснил)"
+<<< n:"Mode 2", t:"Service-managed", k:"Replaces classic OAuth", knows:"which person (found out itself)"
+>>> when:"У сервиса уже есть свой вход, экран согласия или OAuth. Он оставляет их как есть и просто привязывает результат к подписи агента."
+<<< when:"The service already has its own login, consent screen or OAuth. It keeps them as they are and simply binds the result to the agent’s signature."
+>>> l:"запрос + подпись",c
+<<< l:"request + signature",c
+>>> cap:"Агент приходит с паспортом и подписанным запросом."
+<<< cap:"The agent arrives with its passport and a signed request."
+>>> l:"202: нужен человек"
+<<< l:"202: need the human"
+>>> cap:"Сервис отвечает: «Мне нужен человек, пусть зайдёт на мою страницу с этим кодом». И даёт адрес, по которому агенту ждать результат."
+<<< cap:"The service replies: “I need the human. Have them visit my page with this code.” It also gives the agent an address to wait on."
+>>> l:"открой ссылку, код A1B2-C3D4"
+<<< l:"open this link, code A1B2-C3D4"
+>>> cap:"Агент показывает тебе ссылку и код (напрямую или через Person Server)."
+<<< cap:"The agent shows you the link and code (directly or through the Person Server)."
+>>> l:"вход и согласие"
+<<< l:"sign in & consent"
+>>> cap:"Ты логинишься и соглашаешься прямо на сайте сервиса, как в обычном OAuth."
+<<< cap:"You sign in and consent right on the service’s site, just like classic OAuth."
+>>> d:"Код одноразовый"
+<<< d:"The code is single-use"
+>>> l:"ну что? (опрос)"
+<<< l:"done yet? (polling)"
+>>> cap:"Тем временем агент периодически спрашивает сервис, готово ли."
+<<< cap:"Meanwhile the agent keeps asking the service whether it’s done."
+>>> GET /pending/abc123 (подписанный)
+<<< GET /pending/abc123 (signed)
+>>> l:"200 + сессионный токен"
+<<< l:"200 + session token"
+>>> cap:"Готово. Сервис выдаёт сессионный токен, внутри которого может лежать его обычный OAuth-токен."
+<<< cap:"Done. The service issues a session token, which may wrap its regular OAuth token."
+>>> l:"запрос + подпись + токен",c
+<<< l:"request + signature + token",c
+>>> cap:"Дальше агент ходит с этим токеном. Без подписи агента токен бесполезен, украсть и использовать его нельзя."
+<<< cap:"From now on the agent uses this token. Without the agent’s signature it’s useless, so it can’t be stolen and replayed."
+>>> · authorization входит в подпись
+<<< · authorization is covered by the signature
+>>> n:"Режим 3", t:"Личность человека", k:"«Войти через…» для агентов", knows:"какой человек (сказал PS)"
+<<< n:"Mode 3", t:"Person identity", k:"“Sign in with…” for agents", knows:"which person (the PS vouched)"
+>>> when:"Сервису нужно знать, за кого работает агент, но собственный вход ему не нужен. Он верит тому, что скажет Person Server. Это как кнопка «Войти через Google», только для агентов."
+<<< when:"The service needs to know who the agent works for, but doesn’t want to run its own login. It trusts what the Person Server says. Like a “Sign in with Google” button, but for agents."
+>>> l:"дай токен личности для resource.example"
+<<< l:"person token for resource.example, please"
+>>> cap:"Агент просит свой Person Server: «Подтверди сервису, за кого я работаю»."
+<<< cap:"The agent asks its Person Server: “Vouch to this service for who I work for.”"
+>>> l:"пустить агента от твоего имени?"
+<<< l:"let the agent act as you?"
+>>> cap:"Если агент идёт на этот сайт впервые, Person Server может спросить тебя. Вопрос звучит не «можно назвать твоё имя?», а «можно ли агенту действовать там от твоего имени?»."
+<<< cap:"If the agent is visiting this site for the first time, the Person Server may ask you. The question isn’t “may I tell them your name?” but “may this agent act there as you?”"
+>>> (только если нужно)
+<<< (only if needed)
+>>> l:"да"
+<<< l:"yes"
+>>> cap:"Ты соглашаешься."
+<<< cap:"You agree."
+>>> l:"токен личности (для одного сайта)"
+<<< l:"person token (for one site)"
+>>> cap:"Person Server выдаёт токен личности. Для каждого сайта у тебя свой псевдоним, так что сайты не могут сопоставить тебя между собой. Прав этот токен не даёт."
+<<< cap:"The Person Server issues a person token. You get a different pseudonym at every site, so sites can’t link you to each other. This token grants no rights."
+>>> sub=8f14e45f… · ≤ 1 ч
+<<< sub=8f14e45f… · ≤ 1 h
+>>> l:"запрос + подпись + токен личности"
+<<< l:"request + signature + person token"
+>>> cap:"Агент подписывает запрос и прикладывает токен личности вместо паспорта."
+<<< cap:"The agent signs the request and attaches the person token instead of its passport."
+>>> cap:"Сервис знает человека и обслуживает его по своим правилам. Какой именно агент пришёл, он не видит: это защищает от дискриминации по поставщику агента."
+<<< cap:"The service knows the person and serves them by its own rules. It can’t see which agent product came, which protects against discrimination by agent vendor."
+>>> d:"Person Server в самом запросе не участвует"
+<<< d:"The Person Server isn’t in the path of the call"
+>>> n:"Режим 4", t:"Разрешение от PS", k:"Три стороны", knows:"человек + согласованные права"
+<<< n:"Mode 4", t:"PS authorization", k:"Three-party", knows:"person + consented scope"
+>>> when:"Для какого-то действия сервису нужно явное согласие на конкретные права, например запись в календарь. Своего сервера доступа у сервиса нет, он верит Person Server."
+<<< when:"For some action the service needs explicit consent for specific rights, like writing to a calendar. It has no access server of its own, so it trusts the Person Server."
+>>> l:"хочу calendar.write (+ токен личности)"
+<<< l:"want calendar.write (+ person token)"
+>>> cap:"Агент просит у сервиса права на запись в календарь и показывает токен личности."
+<<< cap:"The agent asks the service for calendar write access and shows its person token."
+>>> l:"заявка (для твоего PS)"
+<<< l:"access request (for your PS)"
+>>> cap:"Сервис выписывает подписанную заявку: кто просит, за кого, с каким ключом и какие права. Адресат заявки — Person Server агента."
+<<< cap:"The service writes a signed access request: who is asking, for whom, with which key, and for what rights. It’s addressed to the agent’s Person Server."
+>>> presented_jti · ≤ 5 мин
+<<< presented_jti · ≤ 5 min
+>>> l:"заявка + «зачем мне это»"
+<<< l:"request + “why I need it”"
+>>> cap:"Агент несёт заявку своему Person Server и объясняет зачем: «Найти время для встречи»."
+<<< cap:"The agent takes the request to its Person Server and explains why: “Find a time for the meeting.”"
+>>> l:"агент просит запись в календарь. Разрешить?"
+<<< l:"agent wants calendar write. Allow?"
+>>> cap:"Person Server показывает тебе запрос. Слова агента он помечает как слова агента, отдельно от того, что заявил сервис. Можно задать агенту вопрос в чате."
+<<< cap:"The Person Server shows you the request. It labels the agent’s words as the agent’s, separate from what the service declared. You can ask the agent a question in chat."
+>>> d:"Уточнение: requirement=clarification, до ~5 раундов"
+<<< d:"Clarification: requirement=clarification, up to ~5 rounds"
+>>> l:"разрешаю"
+<<< l:"allow"
+>>> l:"пропуск"
+<<< l:"pass"
+>>> cap:"Person Server выдаёт пропуск с правами и данными о тебе."
+<<< cap:"The Person Server issues a pass with the rights and your details."
+>>> l:"запрос + подпись + пропуск"
+<<< l:"request + signature + pass"
+>>> cap:"Агент идёт к сервису с пропуском."
+<<< cap:"The agent goes to the service with the pass."
+>>> cap:"Сервис проверяет пропуск и применяет свои правила. Любой Person Server может работать с любым сервисом без предварительных договорённостей."
+<<< cap:"The service checks the pass and applies its own rules. Any Person Server can work with any service without prior arrangements."
+>>> n:"Режим 5", t:"Федерация", k:"Четыре стороны", knows:"человек + решение по политике"
+<<< n:"Mode 5", t:"Federation", k:"Four-party", knows:"person + policy verdict"
+>>> when:"У сервиса есть своя охрана (Access Server) со своими правилами. Твой Person Server договаривается с ней за тебя. Для агента разницы с режимом 4 не видно."
+<<< when:"The service has its own gatekeeper (Access Server) with its own rules. Your Person Server negotiates with it for you. To the agent it looks just like mode 4."
+>>> l:"хочу доступ (+ токен личности)"
+<<< l:"want access (+ person token)"
+>>> cap:"Агент просит доступ и показывает токен личности."
+<<< cap:"The agent asks for access and shows its person token."
+>>> l:"заявка (для моей охраны)"
+<<< l:"request (for my gatekeeper)"
+>>> cap:"Сервис выписывает заявку, но адресует её своему Access Server."
+<<< cap:"The service writes the access request but addresses it to its own Access Server."
+>>> l:"заявка + токен личности"
+<<< l:"request + person token"
+>>> cap:"Агент, как обычно, несёт заявку своему Person Server."
+<<< cap:"As usual, the agent takes the request to its Person Server."
+>>> l:"федерация: заявка + личность"
+<<< l:"federation: request + identity"
+>>> cap:"Person Server видит адресата заявки и сам обращается к Access Server сервиса. Запрос подписан ключом Person Server."
+<<< cap:"The Person Server sees who the request is addressed to and contacts the service’s Access Server itself. That call is signed with the Person Server’s key."
+>>> HTTP Sig с jwks_uri PS
+<<< HTTP Sig with the PS jwks_uri
+>>> l:"проверяю правила сервиса"
+<<< l:"checking service rules"
+>>> cap:"Access Server проверяет политику сервиса. Он может попросить у PS дополнительные данные о человеке или задать уточняющий вопрос."
+<<< cap:"The Access Server checks the service’s policy. It may ask the PS for more details about the person or ask a clarifying question."
+>>> cap:"Политика пройдена, Access Server выдаёт пропуск."
+<<< cap:"Policy passed, so the Access Server issues the pass."
+>>> cap:"Person Server передаёт пропуск агенту."
+<<< cap:"The Person Server hands the pass to the agent."
+>>> cap:"Готово. Разные компании, разные домены доверия, и никто ни у кого заранее не регистрировался."
+<<< cap:"Done. Different companies, different trust domains, and nobody registered with anybody in advance."
+>>> const SHORT={ap:"Провайдер"};
+<<< const SHORT={ap:"Provider"};
+>>> <small>из ${N}</small>
+<<< <small>of ${N}</small>
+>>> Сервис узнаёт: <b>
+<<< The service learns: <b>
+
+# ---- script: loop ----
+>>> need:"знать, какой это агент", act:"прикладывает свой паспорт"
+<<< need:"to know which agent this is", act:"attaches its passport"
+>>> need:", чтобы человек зашёл на страницу сервиса", act:"даёт тебе ссылку и код, потом ждёт"
+<<< need:"the person to visit its own page", act:"gives you a link and code, then waits"
+>>> need:"знать, за какого человека работает агент", act:"берёт токен личности у своего Person Server"
+<<< need:"to know which person the agent works for", act:"gets a person token from its Person Server"
+>>> need:"согласие или проверку правил для конкретных прав", act:"несёт приложенную заявку своему Person Server и получает пропуск"
+<<< need:"consent or a policy check for specific rights", act:"takes the attached access request to its Person Server and gets a pass"
+>>> ["Запрос",-90
+<<< ["Request",-90
+>>> ["Ответ:\nчто нужно",0
+<<< ["Reply:\nwhat’s needed",0
+>>> ["Выполнить",90
+<<< ["Satisfy",90
+>>> ["Повтор",180
+<<< ["Retry",180
+>>> <b>Сервису нужно${r.need[0]===","?"":" "}${r.need}</b><span>Агент ${r.act}
+<<< <b>The service needs ${r.need}</b><span>The agent ${r.act}
+>>> Первые два требования обходятся без Person Server. Агент без Person Server может работать только с ними.
+<<< The first two requirements don’t involve a Person Server. An agent without one can only handle these two.
+
+# ---- script: mission ----
+>>> mission:["миссия"
+<<< mission:["mission"
+>>> chat:["вопрос"
+<<< chat:["question"
+>>> token:["токен"
+<<< token:["token"
+>>> audit:["аудит"
+<<< audit:["audit"
+>>> perm:["разрешение"
+<<< perm:["permission"
+>>> update:["обновление"
+<<< update:["update"
+>>> end:["итог"
+<<< end:["result"
+>>> "<b>Предлагаю миссию</b><br><em>Спланировать и забронировать поездку в Японию на следующий месяц для двоих. Бюджет около $5k. Сначала покажу маршрут, потом бронирую.</em><ul><li>Инструменты: WebSearch, BookFlight, BookHotel</li><li>Сервисы: flights.example, hotels.example</li></ul>"
+<<< "<b>Proposed mission</b><br><em>Plan and book a trip to Japan next month for two. Budget around $5k. I’ll show the itinerary before booking anything.</em><ul><li>Tools: WebSearch, BookFlight, BookHotel</li><li>Services: flights.example, hotels.example</li></ul>"
+>>> ["Одобрить",
+<<< ["Approve",
+>>> ["Спросить агента",
+<<< ["Ask the agent",
+>>> "На рассмотрении"
+<<< "Under review"
+>>> h:"Зачем тебе BookFlight с самого начала?"
+<<< h:"Why do you need BookFlight right away?"
+>>> h:"Бронировать буду только после того, как ты одобришь маршрут. Для начала хватит поиска и чтения страниц."
+<<< h:"I’ll only book after you approve the itinerary. For now, search and reading pages are enough."
+>>> "Уточнение: «Зачем BookFlight с самого начала?»"
+<<< "Clarification: “Why BookFlight right away?”"
+>>> "<b>Миссия одобрена и запечатана.</b> Одобренные инструменты: WebSearch и Read, на всё остальное агент спросит разрешение. Для flights.example и hotels.example сразу выданы токены личности, чтобы агент не просил их по одному."
+<<< "<b>Mission approved and sealed.</b> Approved tools: WebSearch and Read; the agent will ask permission for anything else. Person tokens for flights.example and hotels.example were issued right away, so the agent doesn’t have to ask one by one."
+>>> "Миссия одобрена · срок 30 дней"
+<<< "Mission approved · 30-day term"
+>>> "Токены личности: flights.example, hotels.example"
+<<< "Person tokens: flights.example, hotels.example"
+>>> pill:["on","Активна"]
+<<< pill:["on","Active"]
+>>> "Агент начинает работу →"
+<<< "Agent gets to work →"
+>>> h:"Поискал рейсы в Токио на май. Нашёл 12 вариантов. Это отправлено в журнал как аудит."
+<<< h:"Searched for flights to Tokyo in May and found 12 options. That went into the log as an audit record."
+>>> "<b>Агент просит разрешение</b><br><code>SendEmail</code>: отправить тебе маршрут на почту.<br><span class='claim'>SendEmail нет среди одобренных инструментов, поэтому спрашиваю тебя.</span>"
+<<< "<b>The agent asks for permission</b><br><code>SendEmail</code>: email you the itinerary.<br><span class='claim'>SendEmail isn’t among the approved tools, so I’m asking you.</span>"
+>>> "WebSearch «рейсы в Токио, май» → 12 вариантов"
+<<< "WebSearch “flights to Tokyo, May” → 12 options"
+>>> ["Разрешить",
+<<< ["Allow",
+>>> ["Запретить",
+<<< ["Deny",
+>>> h:"Маршрут отправлен тебе на почту."
+<<< h:"Itinerary emailed to you."
+>>> "SendEmail: разрешено"
+<<< "SendEmail: allowed"
+>>> "SendEmail → письмо доставлено"
+<<< "SendEmail → email delivered"
+>>> h:"Понял, письмо не отправляю. Показываю маршрут здесь: 7–14 мая, Токио и Киото."
+<<< h:"Got it, no email. Here’s the itinerary instead: May 7–14, Tokyo and Kyoto."
+>>> "SendEmail: запрещено"
+<<< "SendEmail: denied"
+>>> h:"Прошу пропуск для flights.example: «забронировать рейс на 7 мая»."
+<<< h:"Requesting a pass for flights.example: “book the May 7 flight.”"
+>>> "<b>Сверил с миссией и журналом.</b> Бронь рейса укладывается в задачу, а сервис ты одобрил заранее. Пропуск выдан, тебя не беспокою.<br><span class='claim'>Бронирование идёт через сервис flights.example, поэтому вместо разрешения на инструмент здесь работает пропуск от сервиса.</span>"
+<<< "<b>Checked against the mission and the log.</b> Booking a flight fits the task, and you pre-approved this service. Pass issued without bothering you.<br><span class='claim'>The booking goes through the flights.example service, so a pass from the service does the job here instead of a tool permission.</span>"
+>>> "Пропуск для flights.example: выдан автоматически"
+<<< "Pass for flights.example: issued automatically"
+>>> "BookFlight → 2 билета, 7 и 14 мая"
+<<< "BookFlight → 2 tickets, May 7 and 14"
+>>> h:"<b>Изменение в работе</b><br>Отель из маршрута занят. Предлагаю похожий в двух кварталах по той же цене."
+<<< h:"<b>Change of plan</b><br>The hotel in the itinerary is full. I suggest a similar one two blocks away at the same price."
+>>> ["Принять изменение",
+<<< ["Accept the change",
+>>> h:"Изменение записано в журнал. Сам текст миссии не меняется: изменения накапливаются рядом с ним, и у каждого свой хеш."
+<<< h:"Change recorded in the log. The mission text itself doesn’t change: updates pile up next to it, each with its own hash."
+>>> "Отель заменён · хеш Q2h1Y2sg…"
+<<< "Hotel swapped · hash Q2h1Y2sg…"
+>>> "BookHotel → 7 ночей"
+<<< "BookHotel → 7 nights"
+>>> h:"<b>Предлагаю завершить миссию</b><br>Забронированы рейсы и отель на 7–14 мая, маршрут готов. Итого $4 180."
+<<< h:"<b>Proposing to complete the mission</b><br>Flights and hotel booked for May 7–14, itinerary ready. Total $4,180."
+>>> ["Принять: миссия выполнена",
+<<< ["Accept: mission complete",
+>>> ["Ещё вопрос",
+<<< ["One more question",
+>>> h:"А если планы поменяются?"
+<<< h:"What if plans change?"
+>>> h:"Отель можно бесплатно отменить до 1 мая, билеты с возвратом."
+<<< h:"The hotel can be cancelled for free until May 1, and the tickets are refundable."
+>>> "Вопрос по итогам: отмена бесплатна до 1 мая"
+<<< "Follow-up question: free cancellation until May 1"
+>>> h:"<b>Миссия завершена.</b> Агент может только <em>предложить</em> завершение, закрываешь её ты. Закрытая миссия больше не оживёт: для новой задачи нужна новая миссия."
+<<< h:"<b>Mission complete.</b> The agent can only <em>propose</em> completion; you’re the one who closes it. A closed mission never comes back: a new task needs a new mission."
+>>> "Миссия завершена (completed)"
+<<< "Mission completed"
+>>> pill:["off","Завершена"]
+<<< pill:["off","Completed"]
+>>> ["Сыграть ещё раз",
+<<< ["Play again",
+>>> ["Агент","var(--c-agent)"]
+<<< ["Agent","var(--c-agent)"]
+>>> ["Ты","var(--c-person)"]
+<<< ["You","var(--c-person)"]
+>>> слова агента</span>
+<<< agent’s words</span>
+>>> 'Печать миссии (s256): <b>
+<<< 'Mission seal (s256): <b>
+>>> <br>Хеш попадает во все токены агента, поэтому каждый сервис и каждый пропуск привязаны именно к этой задаче.
+<<< <br>The hash goes into all of the agent’s tokens, so every service and every pass is tied to exactly this task.

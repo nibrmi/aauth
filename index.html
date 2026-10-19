@@ -14,6 +14,13 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="canonical" href="https://nibrmi.github.io/aauth/">
+<link rel="alternate" hreflang="ru" href="https://nibrmi.github.io/aauth/">
+<link rel="alternate" hreflang="en" href="https://nibrmi.github.io/aauth/en/">
+<link rel="alternate" hreflang="x-default" href="https://nibrmi.github.io/aauth/en/">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"AAuth на пальцах","inLanguage":"ru","url":"https://nibrmi.github.io/aauth/","description":"Интерактивная инфографика по протоколу AAuth: паспорт и подпись для ИИ-агентов, пять режимов доступа, миссии и сравнение с OAuth.","about":{"@type":"Thing","name":"AAuth protocol","sameAs":"https://datatracker.ietf.org/doc/draft-hardt-oauth-aauth-protocol/"},"image":"https://nibrmi.github.io/aauth/og.png"}</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232F6FEB'/%3E%3Ctext x='16' y='22.5' font-family='Arial Black,Arial' font-weight='900' font-size='15' fill='white' text-anchor='middle'%3EAA%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,8 +72,15 @@ section.ch{padding-block:56px 8px;scroll-margin-top:52px}
 
 /* nav */
 nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
-nav.top .wrap::-webkit-scrollbar{display:none}
+nav.top .wrap{display:flex;gap:8px;align-items:center;padding-block:8px}
+nav.top .links{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;padding-block:2px}
+nav.top .links::-webkit-scrollbar{display:none}
+nav.top a.lang{flex:none;font-weight:700;color:var(--accent);border-color:var(--accent);letter-spacing:.04em}
+nav.top a.lang:hover{background:var(--accent);color:#fff}
+.langhint{background:var(--s-agent);border-bottom:1px solid var(--line);font-size:14px}
+.langhint .wrap{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding-block:8px}
+.langhint a{font-weight:700}
+.langhint button{margin-left:auto;border:0;background:transparent;font-size:20px;line-height:1;color:var(--muted);padding:2px 6px}
 nav.top a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid transparent}
 nav.top a:hover{color:var(--ink);border-color:var(--line)}
 nav.top a.on{color:var(--ink);background:var(--surface);border-color:var(--line)}
@@ -312,6 +326,7 @@ footer ul{padding-left:18px;display:grid;gap:4px}
 
 <nav class="top" aria-label="Разделы">
   <div class="wrap">
+    <div class="links">
     <a class="brand" href="#top">AAuth</a>
     <a href="#problem">Зачем</a>
     <a href="#roles">Кто участвует</a>
@@ -323,8 +338,11 @@ footer ul{padding-left:18px;display:grid;gap:4px}
     <a href="#compare">vs OAuth</a>
     <a href="#faq">Вопросы</a>
     <a href="#status">Статус</a>
+    </div>
+    <a class="lang" href="https://nibrmi.github.io/aauth/en/" hreflang="en" lang="en" title="English version">EN</a>
   </div>
 </nav>
+<div class="langhint" id="langhint" hidden><div class="wrap"><span lang="en">This page is also available in English.</span><a href="https://nibrmi.github.io/aauth/en/" hreflang="en" lang="en">Open the English version →</a><button id="lh-x" aria-label="Close">×</button></div></div>
 
 <header class="hero" id="top">
   <div class="wrap">
@@ -844,7 +862,7 @@ function render(animate){
       const bw=Math.min(span-6,104);
       el("rect",{x:x-bw/2,y:6,width:bw,height:62,rx:12,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
       icon(seq,ac.i,x,27,24,ac.c);
-      el("text",{x,y:57,"text-anchor":"middle",style:"fill:var(--ink);font:700 10.5px var(--f-body)",text:SHORT[a]||ac.name},seq);
+      el("text",{x,y:57,"text-anchor":"middle",style:`fill:var(--ink);font:700 ${span<92?9.5:10.5}px var(--f-body)`,text:SHORT[a]||ac.name},seq);
     } else {
       el("rect",{x:x-82,y:8,width:164,height:58,rx:14,style:`fill:${ac.s};stroke:${ac.c}`,"stroke-width":1.5},seq);
       icon(seq,ac.i,x-56,37,26,ac.c);
@@ -996,6 +1014,15 @@ function relayout(){ const w=document.documentElement.clientWidth; if(w===lastW)
 const onRz=()=>{ clearTimeout(rzT); rzT=setTimeout(relayout,120); };
 if("ResizeObserver" in window) new ResizeObserver(onRz).observe(document.documentElement); else addEventListener("resize",onRz);
 const navLinks=[...document.querySelectorAll('nav.top a[href^="#"]:not(.brand)')];
+/* suggest the other language once, unless the viewer dismissed it */
+try{
+  const PAGE_LANG=document.documentElement.lang||"ru", langs=(navigator.languages||[navigator.language||""]).map(l=>l.toLowerCase());
+  const wantsRu=langs.some(l=>l.startsWith("ru"));
+  const show = PAGE_LANG==="en" ? wantsRu : !wantsRu;
+  let seen=null; try{ seen=localStorage.getItem("aauth-langhint"); }catch(e){}
+  if(show && !seen){ $("#langhint").hidden=false; }
+  $("#lh-x").onclick=()=>{ $("#langhint").hidden=true; try{ localStorage.setItem("aauth-langhint","1"); }catch(e){} };
+}catch(e){}
 if("IntersectionObserver" in window){
   const io=new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting){ navLinks.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id)); const on=navLinks.find(a=>a.classList.contains("on")); if(on){ const bar=on.parentElement; bar.scrollTo({left:on.offsetLeft-bar.clientWidth/2+on.clientWidth/2,behavior:"smooth"}); } } }); },{rootMargin:"-45% 0px -50% 0px"});
   document.querySelectorAll("section.ch").forEach(s=>io.observe(s));
